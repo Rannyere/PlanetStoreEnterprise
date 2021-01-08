@@ -6,6 +6,7 @@ using PSE.Identification.API.Models;
 
 namespace PSE.Identification.API.Controllers
 {
+    [ApiController]
     [Route("api/account")]
     public class AuthController : Controller
     {
@@ -21,7 +22,7 @@ namespace PSE.Identification.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterUser registerUser)
         {
-            if (ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest();
 
             var user = new IdentityUser
             {
@@ -44,7 +45,7 @@ namespace PSE.Identification.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUser loginUser)
         {
-            if (ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest();
 
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, isPersistent: false, lockoutOnFailure: true);
 
