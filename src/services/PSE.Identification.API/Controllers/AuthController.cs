@@ -14,9 +14,8 @@ using PSE.Identification.API.Models;
 
 namespace PSE.Identification.API.Controllers
 {
-    [ApiController]
     [Route("api/account")]
-    public class AuthController : Controller
+    public class AuthController : MainController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -34,7 +33,7 @@ namespace PSE.Identification.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterUser registerUser)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new IdentityUser
             {
@@ -47,26 +46,37 @@ namespace PSE.Identification.API.Controllers
 
             if (result.Succeeded)
             {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return Ok(await GenerateJwt(registerUser.Email));
+                return CustomResponse(await GenerateJwt(registerUser.Email));
             }
 
-            return BadRequest();
+            foreach (var error in result.Errors)
+            {
+                AddErrorInProcess(error.Description);
+            }
+
+            return CustomResponse();
         }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUser loginUser)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, isPersistent: false, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {
-                return Ok(await GenerateJwt(loginUser.Email));
+                return CustomResponse(await GenerateJwt(loginUser.Email));
             }
 
-            return BadRequest();
+            if (result.IsLockedOut)
+            {
+                AddErrorInProcess("User temporarily blocked by invalid attempts");
+                return CustomResponse();
+            }
+
+            AddErrorInProcess("Incorrect username or password");
+            return CustomResponse();
         }
 
         private async Task<UserLoginTokenResponse> GenerateJwt(string email)
