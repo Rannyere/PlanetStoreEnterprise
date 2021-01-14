@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -83,6 +84,15 @@ namespace PSE.Identification.API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
+
+            var claimsIdentity = await GetClaimsUser(claims, user);
+            var encodedToken = CodifyToken(claimsIdentity);
+           
+            return GetResponseToken(encodedToken, user,claims);
+        }
+
+        private async Task<ClaimsIdentity> GetClaimsUser(ICollection<Claim> claims, IdentityUser user)
+        {
             var userRoles = await _userManager.GetRolesAsync(user);
 
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
@@ -96,9 +106,14 @@ namespace PSE.Identification.API.Controllers
                 claims.Add(new Claim("role", userRole));
             }
 
-            var identityClaims = new ClaimsIdentity();
-            identityClaims.AddClaims(claims);
+            var claimsIdentity = new ClaimsIdentity();
+            claimsIdentity.AddClaims(claims);
 
+            return claimsIdentity;
+        }
+
+        private string CodifyToken(ClaimsIdentity claimsIdentity)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
@@ -106,14 +121,17 @@ namespace PSE.Identification.API.Controllers
             {
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.ValidOn,
-                Subject = identityClaims,
+                Subject = claimsIdentity,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
-            var encodedToken = tokenHandler.WriteToken(token);
+            return tokenHandler.WriteToken(token);
+        }
 
-            var response = new UserLoginTokenResponse
+        private UserLoginTokenResponse GetResponseToken(string encodedToken, IdentityUser user, IEnumerable<Claim> claims)
+        {
+            return new UserLoginTokenResponse
             {
                 AccessToken = encodedToken,
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
@@ -124,12 +142,9 @@ namespace PSE.Identification.API.Controllers
                     Claims = claims.Select(c => new UserClaim { Type = c.Type, Value = c.Value })
                 }
             };
-
-            return response;
-
         }
 
-        private static long ToUnixEpochDate(DateTime date)
+            private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
     }
 }
