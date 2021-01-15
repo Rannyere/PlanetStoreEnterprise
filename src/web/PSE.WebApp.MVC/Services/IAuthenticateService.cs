@@ -6,8 +6,8 @@ namespace PSE.WebApp.MVC.Services
 {
     public interface IAuthenticateService
     {
-        Task<string> LoginUser(LoginUser loginUser);
+        Task<UserLoginTokenResponse> LoginUser(LoginUser loginUser);
 
-        Task<string> RegisterUser(RegisterUser registerUser);
+        Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser);
     }
 }

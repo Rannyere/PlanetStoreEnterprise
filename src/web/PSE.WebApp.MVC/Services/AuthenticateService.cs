@@ -16,7 +16,7 @@ namespace PSE.WebApp.MVC.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> LoginUser(LoginUser loginUser)
+        public async Task<UserLoginTokenResponse> LoginUser(LoginUser loginUser)
         {
             var loginContent = new StringContent(
                 JsonSerializer.Serialize(loginUser),
@@ -25,12 +25,15 @@ namespace PSE.WebApp.MVC.Services
 
             var response = await _httpClient.PostAsync("https://localhost:20840/api/account/login", loginContent);
 
-            var test = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
 
-            return JsonSerializer.Deserialize<string>(await response.Content.ReadAsStringAsync());
+            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);
         }
 
-        public async Task<string> RegisterUser(RegisterUser registerUser)
+        public async Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser)
         {
             var registerContent = new StringContent(
                 JsonSerializer.Serialize(registerUser),
@@ -39,7 +42,12 @@ namespace PSE.WebApp.MVC.Services
 
             var response = await _httpClient.PostAsync("https://localhost:20840/api/account/register", registerContent);
 
-            return JsonSerializer.Deserialize<string>(await response.Content.ReadAsStringAsync());
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);
         }
     }
 }
