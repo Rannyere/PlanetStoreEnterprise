@@ -20,6 +20,8 @@ namespace PSE.WebApp.MVC
             services.AddAuthenticateIdentityConfiguration();
 
             services.AddAMvcConfiguration();
+
+            services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
