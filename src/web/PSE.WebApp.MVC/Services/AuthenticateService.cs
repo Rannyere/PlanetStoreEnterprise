@@ -30,7 +30,7 @@ namespace PSE.WebApp.MVC.Services
                 PropertyNameCaseInsensitive = true,
             };
 
-            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);
+            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);          
         }
 
         public async Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser)

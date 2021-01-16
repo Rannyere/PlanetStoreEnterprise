@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using PSE.WebApp.MVC.Models;
 using PSE.WebApp.MVC.Services;
@@ -28,9 +33,11 @@ namespace PSE.WebApp.MVC.Controllers
         {
             if (!ModelState.IsValid) return View(registerUser);
 
-            var response = _authenticateService.RegisterUser(registerUser);
+            var response = await _authenticateService.RegisterUser(registerUser);
 
-            if (false) return View(registerUser);
+            //if (false) return View(registerUser);
+
+            await ConnectAccount(response);
 
             return RedirectToAction("Index", "Home");
 
@@ -49,9 +56,11 @@ namespace PSE.WebApp.MVC.Controllers
         {
             if (!ModelState.IsValid) return View(loginUser);
 
-            var response = _authenticateService.LoginUser(loginUser);
+            var response = await _authenticateService.LoginUser(loginUser);
 
-            if (false) return View(loginUser);
+            //if (false) return View(loginUser);
+
+            await ConnectAccount(response);
 
             return RedirectToAction("Index", "Home");
         }
@@ -63,5 +72,31 @@ namespace PSE.WebApp.MVC.Controllers
             return View();
         }
 
+        private async Task ConnectAccount(UserLoginTokenResponse userLoginTokenResponse)
+        {
+            var token = GetFormatedToken(userLoginTokenResponse.AccessToken);
+
+            var claims = new List<Claim>();
+            claims.Add(new Claim("JWT", userLoginTokenResponse.AccessToken));
+            claims.AddRange(token.Claims);
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                IsPersistent = true
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+        }
+
+        private static JwtSecurityToken GetFormatedToken(string jwtToken)
+        {
+            return new JwtSecurityTokenHandler().ReadToken(jwtToken) as JwtSecurityToken;
+        }
     }
 }

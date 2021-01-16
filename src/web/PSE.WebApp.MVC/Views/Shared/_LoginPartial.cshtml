@@ -1,21 +1,23 @@
-﻿
+﻿@using PSE.WebApp.MVC.Extensions
+@inject IUser AppUser
+
 <ul class="navbar-nav">
-    @if (Context.User.Identity.IsAuthenticated)
+    @if (AppUser.IsAuthenticated())
     {
-    <li class="nav-item">
-        <a class="nav-link text-dark" title="Manage">Hello, user!</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Identification" asp-action="Logout">Exit</a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" title="Manage">Hello, @AppUser.GetUserEmail()!</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Identification" asp-action="Logout">Exit</a>
+        </li>
     }
     else
     {
-    <li class="nav-item" style="padding-right: 30px;">
-        <a class="btn btn-success" asp-controller="Identification" asp-action="Register">Create your account</a>
-    </li>
-    <li class="nav-item">
-        <a class="btn btn-primary" asp-controller="Identification" asp-action="Login">Login</a>
-    </li>
+        <li class="nav-item" style="padding-right: 30px;">
+            <a class="btn btn-success" asp-controller="Identification" asp-action="Register">Create your account</a>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-primary" asp-controller="Identification" asp-action="Login">Login</a>
+        </li>
     }
 </ul>
