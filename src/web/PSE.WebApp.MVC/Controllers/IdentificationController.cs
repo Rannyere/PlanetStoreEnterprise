@@ -67,9 +67,10 @@ namespace PSE.WebApp.MVC.Controllers
 
         [HttpGet]
         [Route("exit")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task ConnectAccount(UserLoginTokenResponse userLoginTokenResponse)
