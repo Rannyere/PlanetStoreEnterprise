@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PSE.WebApp.MVC.Extensions;
 
 namespace PSE.WebApp.MVC.Configuration
 {
@@ -22,7 +23,8 @@ namespace PSE.WebApp.MVC.Configuration
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error/500");
+                app.UseStatusCodePagesWithRedirects("/error/{0}");
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -32,7 +34,7 @@ namespace PSE.WebApp.MVC.Configuration
 
             app.UseAuthenticateIdentityConfiguration();
 
-            app.UseAuthorization();
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
