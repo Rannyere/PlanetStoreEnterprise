@@ -21,5 +21,6 @@ namespace PSE.WebApp.MVC.Models
         public string AccessToken { get; set; }
         public double ExpiresIn { get; set; }
         public UserToken UserToken { get; set; }
+        public ResponseErrorResult ResponseErrorResult { get; set; }
     }
 }

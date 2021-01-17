@@ -11,7 +11,7 @@ using PSE.WebApp.MVC.Services;
 
 namespace PSE.WebApp.MVC.Controllers
 {
-    public class IdentificationController : Controller
+    public class IdentificationController : MainController
     {
         private readonly IAuthenticateService _authenticateService;
 
@@ -35,7 +35,7 @@ namespace PSE.WebApp.MVC.Controllers
 
             var response = await _authenticateService.RegisterUser(registerUser);
 
-            //if (false) return View(registerUser);
+            if (HasErrorsInResponse(response.ResponseErrorResult)) return View(registerUser);
 
             await ConnectAccount(response);
 
@@ -58,7 +58,7 @@ namespace PSE.WebApp.MVC.Controllers
 
             var response = await _authenticateService.LoginUser(loginUser);
 
-            //if (false) return View(loginUser);
+            if (HasErrorsInResponse(response.ResponseErrorResult)) return View(loginUser);
 
             await ConnectAccount(response);
 

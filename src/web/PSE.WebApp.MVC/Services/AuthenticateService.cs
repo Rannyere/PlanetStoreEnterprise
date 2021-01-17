@@ -7,7 +7,7 @@ using PSE.WebApp.MVC.Models;
 
 namespace PSE.WebApp.MVC.Services
 {
-    public class AuthenticateService : IAuthenticateService
+    public class AuthenticateService : Service, IAuthenticateService
     {
         private readonly HttpClient _httpClient;
 
@@ -30,6 +30,14 @@ namespace PSE.WebApp.MVC.Services
                 PropertyNameCaseInsensitive = true,
             };
 
+            if (!CheckErrorsResponse(response))
+            {
+                return new UserLoginTokenResponse
+                {
+                    ResponseErrorResult = JsonSerializer.Deserialize<ResponseErrorResult>(await response.Content.ReadAsStringAsync(), options)
+                };
+            }
+
             return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);          
         }
 
@@ -46,6 +54,14 @@ namespace PSE.WebApp.MVC.Services
             {
                 PropertyNameCaseInsensitive = true,
             };
+
+            if (!CheckErrorsResponse(response))
+            {
+                return new UserLoginTokenResponse
+                {
+                    ResponseErrorResult = JsonSerializer.Deserialize<ResponseErrorResult>(await response.Content.ReadAsStringAsync(), options)
+                };
+            }
 
             return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);
         }
