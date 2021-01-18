@@ -34,7 +34,6 @@ namespace PSE.Identification.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterUser registerUser)
         {
-            return new StatusCodeResult(401);
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new IdentityUser

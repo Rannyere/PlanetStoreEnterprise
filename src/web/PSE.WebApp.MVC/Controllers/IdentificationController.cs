@@ -45,15 +45,17 @@ namespace PSE.WebApp.MVC.Controllers
 
         [HttpGet]
         [Route("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult> Login(LoginUser loginUser)
+        public async Task<ActionResult> Login(LoginUser loginUser, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid) return View(loginUser);
 
             var response = await _authenticateService.LoginUser(loginUser);
@@ -62,7 +64,9 @@ namespace PSE.WebApp.MVC.Controllers
 
             await ConnectAccount(response);
 
-            return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+
+            return LocalRedirect(returnUrl);
         }
 
         [HttpGet]

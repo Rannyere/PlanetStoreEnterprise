@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using PSE.WebApp.MVC.Extensions;
 using PSE.WebApp.MVC.Models;
 
 namespace PSE.WebApp.MVC.Services
@@ -11,59 +13,46 @@ namespace PSE.WebApp.MVC.Services
     {
         private readonly HttpClient _httpClient;
 
-        public AuthenticateService(HttpClient httpClient)
+        public AuthenticateService(HttpClient httpClient,
+                                   IOptions<AppSettings> settings)
         {
+            httpClient.BaseAddress = new Uri(settings.Value.BasePathUrl);
+
             _httpClient = httpClient;
         }
 
         public async Task<UserLoginTokenResponse> LoginUser(LoginUser loginUser)
         {
-            var loginContent = new StringContent(
-                JsonSerializer.Serialize(loginUser),
-                Encoding.UTF8,
-                "application/json");
+            var loginContent = GetContent(loginUser);
 
-            var response = await _httpClient.PostAsync("https://localhost:20840/api/account/login", loginContent);
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            var response = await _httpClient.PostAsync("/api/account/login", loginContent);
 
             if (!CheckErrorsResponse(response))
             {
                 return new UserLoginTokenResponse
                 {
-                    ResponseErrorResult = JsonSerializer.Deserialize<ResponseErrorResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseErrorResult = await DeserializeObjectResponse<ResponseErrorResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);          
+            return await DeserializeObjectResponse<UserLoginTokenResponse>(response);
         }
 
         public async Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser)
         {
-            var registerContent = new StringContent(
-                JsonSerializer.Serialize(registerUser),
-                Encoding.UTF8,
-                "application/json");
+            var registerContent = GetContent(registerUser);
 
-            var response = await _httpClient.PostAsync("https://localhost:20840/api/account/register", registerContent);
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            var response = await _httpClient.PostAsync("api/account/register", registerContent);
 
             if (!CheckErrorsResponse(response))
             {
                 return new UserLoginTokenResponse
                 {
-                    ResponseErrorResult = JsonSerializer.Deserialize<ResponseErrorResult>(await response.Content.ReadAsStringAsync(), options)
+                    ResponseErrorResult = await DeserializeObjectResponse<ResponseErrorResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UserLoginTokenResponse>(await response.Content.ReadAsStringAsync(), options);
+            return await DeserializeObjectResponse<UserLoginTokenResponse>(response);
         }
     }
 }
