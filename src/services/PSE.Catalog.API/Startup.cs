@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PSE.Catalog.API.Data;
+using PSE.Catalog.API.Data.Repository;
+using PSE.Catalog.API.Models;
 
 namespace PSE.Catalog.API
 {
@@ -25,7 +29,13 @@ namespace PSE.Catalog.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<CatalogDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString(name: "DefaultConnection")));
+
             services.AddControllers();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<CatalogDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,7 +3,7 @@ using PSE.Core.DomainObjects;
 
 namespace PSE.Catalog.API.Models
 {
-    public class Product : Entity
+    public class Product : Entity, IAggregatedRoot
     {
         public string Name { get; set; }
         public string Description { get; set; }
