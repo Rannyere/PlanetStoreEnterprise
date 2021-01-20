@@ -12,7 +12,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Views\Shared\Components\" />
     <Folder Include="Views\Shared\Components\Summary\" />
-    <Folder Include="wwwroot\images\produtos\" />
+    <Folder Include="wwwroot\images\products\" />
     <Folder Include="wwwroot\images\avatars\" />
   </ItemGroup>
   <ItemGroup>
