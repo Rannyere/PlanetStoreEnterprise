@@ -9,9 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PSE.Identification.API.Extensions;
 using PSE.Identification.API.Models;
-
+using PSE.WebAPI.Core.Identification;
 
 namespace PSE.Identification.API.Controllers
 {

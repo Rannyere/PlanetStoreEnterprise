@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PSE.Identification.API.Extensions
+namespace PSE.WebAPI.Core.Identification
 {
     public class AppSettings
     {

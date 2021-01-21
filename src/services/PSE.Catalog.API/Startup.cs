@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSE.Catalog.API.Configuration;
-
+using PSE.WebAPI.Core.Identification;
 
 namespace PSE.Catalog.API
 {
@@ -32,6 +32,8 @@ namespace PSE.Catalog.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiConfiguration(Configuration);
+
+            services.AddJwtConfiguration(Configuration);
 
             services.AddSwaggerConfiguration();
 

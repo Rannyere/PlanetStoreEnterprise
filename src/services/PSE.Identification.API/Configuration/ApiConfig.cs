@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using PSE.WebAPI.Core.Identification;
 
 namespace PSE.Identification.API.Configuration
 {
@@ -26,7 +27,7 @@ namespace PSE.Identification.API.Configuration
 
             app.UseRouting();
 
-            app.UseIdentityConfiguration(); //identity usage must be between useRouting and useEndpoints
+            app.UseAuthConfiguration(); //identity usage must be between useRouting and useEndpoints
 
             app.UseEndpoints(endpoints =>
             {
