@@ -33,7 +33,7 @@ namespace PSE.WebApp.MVC.Extensions
 
         public IEnumerable<Claim> GetClaims()
         {
-            throw new NotImplementedException();
+            return _accessor.HttpContext.User.Claims;
         }    
 
         public bool HasRole(string role)

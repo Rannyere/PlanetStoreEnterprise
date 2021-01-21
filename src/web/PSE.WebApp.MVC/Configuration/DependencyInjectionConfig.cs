@@ -11,6 +11,7 @@ namespace PSE.WebApp.MVC.Configuration
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddHttpClient<IAuthenticateService, AuthenticateService>();
+            services.AddHttpClient<ICatalogService, CatalogService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUser, AspNetUser>();
