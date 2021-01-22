@@ -13,8 +13,8 @@ namespace PSE.Catalog.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "PlanetStore Enterprise Catalog API",
-                    Description = "This API is responsible for accessing product data",
+                    Title = "PlanetStore - Catalog API",
+                    Description = "This API is responsible for listing the products catalog",
                     Contact = new OpenApiContact() { Name = "Rannyere Almeida", Email = "rannyalmeida27@hotmail.com" },
                     //License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
                 });

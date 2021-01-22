@@ -14,7 +14,7 @@ namespace PSE.Identification.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "PlanetStore Identity API",
+                    Title = "PlanetStore - Identity API",
                     Description = "Identification of users API",
                     Contact = new OpenApiContact() { Name = "Rannyere Almeida", Email = "rannyalmeida27@hotmail.com" },
                     //License = new OpenApiLicense() {Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }

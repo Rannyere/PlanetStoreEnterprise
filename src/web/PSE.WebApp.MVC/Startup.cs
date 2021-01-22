@@ -33,7 +33,7 @@ namespace PSE.WebApp.MVC
 
             services.AddAMvcConfiguration(Configuration);
 
-            services.RegisterServices();
+            services.RegisterServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
