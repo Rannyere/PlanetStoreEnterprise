@@ -64,7 +64,7 @@ namespace PSE.WebApp.MVC.Controllers
 
             await ConnectAccount(response);
 
-            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Catalog");
 
             return LocalRedirect(returnUrl);
         }
@@ -74,7 +74,7 @@ namespace PSE.WebApp.MVC.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Catalog");
         }
 
         private async Task ConnectAccount(UserLoginTokenResponse userLoginTokenResponse)
