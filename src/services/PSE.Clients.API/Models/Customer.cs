@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using PSE.Core.DomainObjects;
 
-namespace PSE.Client.API.Models
+namespace PSE.Clients.API.Models
 {
-    public class Client : Entity, IAggregatedRoot
+    public class Customer : Entity, IAggregatedRoot
     {
         public string Name { get; private set; }
 
@@ -13,12 +14,12 @@ namespace PSE.Client.API.Models
 
         public bool Removed { get; private set; }
 
-        public Address Address { get; private set; }
+        public IEnumerable<Address> Adresses { get; private set; }
 
         /* Entity Framework Relation */
-        protected Client() { }
+        protected Customer() { }
 
-        public Client(Guid id, string name, string email, string cpf)
+        public Customer(Guid id, string name, string email, string cpf)
         {
             Id = id;
             Name = name;
@@ -32,9 +33,9 @@ namespace PSE.Client.API.Models
             Email = new Email(email);
         }
 
-        public void AttributeAddress(Address address)
+        public void AttributeAddress(IEnumerable<Address> adresses)
         {
-            Address = address;
+            Adresses = adresses;
         }
     }
 }

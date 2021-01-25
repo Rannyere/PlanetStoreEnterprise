@@ -1,7 +1,7 @@
 ﻿using System;
 using PSE.Core.DomainObjects;
 
-namespace PSE.Client.API.Models
+namespace PSE.Clients.API.Models
 {
     public class Address : Entity
     {
@@ -19,10 +19,10 @@ namespace PSE.Client.API.Models
 
         public string State { get; private set; }
 
-        public Guid ClientId { get; private set; }
+        public Guid CustomerId { get; private set; }
 
         /* Entity Framework Relations */
-        public Client Client { get; protected set; }
+        public Customer Customer { get; protected set; }
 
         public Address(string street, string number, string complement, string zipCode, string neighborhood, string city, string state)
         {
