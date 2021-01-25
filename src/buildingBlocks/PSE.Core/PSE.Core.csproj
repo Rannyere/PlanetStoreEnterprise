@@ -7,5 +7,6 @@
   <ItemGroup>
     <Folder Include="DomainObjects\" />
     <Folder Include="Data\" />
+    <Folder Include="Utils\" />
   </ItemGroup>
 </Project>
