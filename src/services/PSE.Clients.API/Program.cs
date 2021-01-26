@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace PSE.Client.API
+namespace PSE.Clients.API
 {
     public class Program
     {

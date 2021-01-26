@@ -14,8 +14,8 @@ CatalogDbContext:
 dotnet ef migrations add initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose 
 dotnet ef database update initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose
 
-Migration PSE.Catalog.API:
-CatalogDbContext:
+Migration PSE.Clients.API:
+ClientsDbContext:
 dotnet ef migrations add initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
 dotnet ef database update initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
 

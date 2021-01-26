@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>3b9956e9-2b7d-4797-8155-c1255c50f113</UserSecretsId>  
   </PropertyGroup>
     
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'PSE.Client.API' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'PSE.Clients.API' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Selfhosting' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.10" />
@@ -12,6 +14,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
   </ItemGroup>
             
   <ItemGroup>
@@ -20,13 +23,20 @@
     <Folder Include="Configuration\" />
     <Folder Include="Controllers\" />
     <Folder Include="Data\Mappings\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Commands\" />
+    <Folder Include="Application\Events\" />
+    <Folder Include="Application\Queries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\WeatherForecastController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>
