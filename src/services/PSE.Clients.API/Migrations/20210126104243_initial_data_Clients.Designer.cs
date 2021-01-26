@@ -9,7 +9,7 @@ using PSE.Clients.API.Data;
 namespace PSE.Clients.API.Migrations
 {
     [DbContext(typeof(ClientsDbContext))]
-    [Migration("20210125082913_initial_data_Clients")]
+    [Migration("20210126104243_initial_data_Clients")]
     partial class initial_data_Clients
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace PSE.Clients.API.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("PSE.Clients.API.Models.Customer", b =>
@@ -83,7 +83,7 @@ namespace PSE.Clients.API.Migrations
             modelBuilder.Entity("PSE.Clients.API.Models.Address", b =>
                 {
                     b.HasOne("PSE.Clients.API.Models.Customer", "Customer")
-                        .WithMany("Adresses")
+                        .WithMany("Addresses")
                         .HasForeignKey("CustomerId")
                         .IsRequired();
                 });

@@ -38,7 +38,7 @@ namespace PSE.Clients.API.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(50)");
 
-            builder.ToTable("Adresses");
+            builder.ToTable("Addresses");
         }
     }
 }

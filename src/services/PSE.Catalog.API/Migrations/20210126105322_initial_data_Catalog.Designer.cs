@@ -9,7 +9,7 @@ using PSE.Catalog.API.Data;
 namespace PSE.Catalog.API.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20210120074657_initial_data_Catalog")]
+    [Migration("20210126105322_initial_data_Catalog")]
     partial class initial_data_Catalog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

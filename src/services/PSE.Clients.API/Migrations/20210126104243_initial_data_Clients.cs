@@ -23,7 +23,7 @@ namespace PSE.Clients.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Adresses",
+                name: "Addresses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -38,9 +38,9 @@ namespace PSE.Clients.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Adresses", x => x.Id);
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Adresses_Customers_CustomerId",
+                        name: "FK_Addresses_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
@@ -48,15 +48,15 @@ namespace PSE.Clients.API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Adresses_CustomerId",
-                table: "Adresses",
+                name: "IX_Addresses_CustomerId",
+                table: "Addresses",
                 column: "CustomerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Adresses");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "Customers");

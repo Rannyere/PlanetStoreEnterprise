@@ -34,7 +34,7 @@ namespace PSE.Clients.API.Data.Mappings
             });
 
             // 1 : * => Customer : Adresses
-            builder.HasMany(c => c.Adresses)
+            builder.HasMany(c => c.Addresses)
                 .WithOne(a => a.Customer)
                 .HasForeignKey(a => a.CustomerId);
 

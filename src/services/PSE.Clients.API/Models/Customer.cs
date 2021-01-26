@@ -14,7 +14,7 @@ namespace PSE.Clients.API.Models
 
         public bool Removed { get; private set; }
 
-        public IEnumerable<Address> Adresses { get; private set; }
+        public IEnumerable<Address> Addresses { get; private set; }
 
         /* Entity Framework Relation */
         protected Customer() { }
@@ -33,9 +33,9 @@ namespace PSE.Clients.API.Models
             Email = new Email(email);
         }
 
-        public void AttributeAddress(IEnumerable<Address> adresses)
+        public void AttributeAddress(IEnumerable<Address> addresses)
         {
-            Adresses = adresses;
+            Addresses = addresses;
         }
     }
 }

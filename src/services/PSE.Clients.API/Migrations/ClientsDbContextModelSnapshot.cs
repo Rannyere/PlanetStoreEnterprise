@@ -57,7 +57,7 @@ namespace PSE.Clients.API.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("PSE.Clients.API.Models.Customer", b =>
@@ -81,7 +81,7 @@ namespace PSE.Clients.API.Migrations
             modelBuilder.Entity("PSE.Clients.API.Models.Address", b =>
                 {
                     b.HasOne("PSE.Clients.API.Models.Customer", "Customer")
-                        .WithMany("Adresses")
+                        .WithMany("Addresses")
                         .HasForeignKey("CustomerId")
                         .IsRequired();
                 });

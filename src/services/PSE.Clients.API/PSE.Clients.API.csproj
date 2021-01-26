@@ -15,6 +15,7 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
   </ItemGroup>
             
   <ItemGroup>
@@ -27,6 +28,7 @@
     <Folder Include="Application\Commands\" />
     <Folder Include="Application\Events\" />
     <Folder Include="Application\Queries\" />
+    <Folder Include="Data\Repository\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\WeatherForecastController.cs" />
