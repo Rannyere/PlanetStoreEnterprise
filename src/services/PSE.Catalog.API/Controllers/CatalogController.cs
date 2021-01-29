@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSE.Catalog.API.Models;
+using PSE.WebAPI.Core.Controllers;
 using PSE.WebAPI.Core.Identification;
 
 namespace PSE.Catalog.API.Controllers
 {
-    [ApiController]
     [Authorize]
-    public class CatalogController : Controller
+    public class CatalogController : MainController
     {
         private readonly IProductRepository _productRepository;
 

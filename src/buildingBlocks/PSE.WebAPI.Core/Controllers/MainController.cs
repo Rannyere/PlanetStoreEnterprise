@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace PSE.Identification.API.Controllers
+namespace PSE.WebAPI.Core.Controllers
 {
     [ApiController]
     public abstract class MainController : Controller
