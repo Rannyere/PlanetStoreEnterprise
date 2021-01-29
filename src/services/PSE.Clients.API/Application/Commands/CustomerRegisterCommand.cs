@@ -4,7 +4,7 @@ using PSE.Core.Messages;
 
 namespace PSE.Clients.API.Application.Commands
 {
-    public class RegisterCustomerCommand : Command
+    public class CustomerRegisterCommand : Command
     {
         public Guid Id { get; private set; }
 
@@ -14,7 +14,7 @@ namespace PSE.Clients.API.Application.Commands
 
         public string Cpf { get; private set; }
 
-        public RegisterCustomerCommand(Guid id, string name, string email, string cpf)
+        public CustomerRegisterCommand(Guid id, string name, string email, string cpf)
         {
             AggregatedId = id;
             Id = id;
@@ -25,14 +25,14 @@ namespace PSE.Clients.API.Application.Commands
 
         public override bool IsValid()
         {
-            ValidationResult = new RegisterCustomerValidation().Validate(this);
+            ValidationResult = new CustomerRegisterValidation().Validate(this);
             return ValidationResult.IsValid;
         }
     }
 
-    public class RegisterCustomerValidation : AbstractValidator<RegisterCustomerCommand>
+    public class CustomerRegisterValidation : AbstractValidator<CustomerRegisterCommand>
     {
-        public RegisterCustomerValidation()
+        public CustomerRegisterValidation()
         {
             RuleFor(c => c.Id)
                 .NotEqual(Guid.Empty)

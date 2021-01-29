@@ -3,12 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using MediatR;
+using PSE.Clients.API.Application.Events;
 using PSE.Clients.API.Models;
 using PSE.Core.Messages;
 
 namespace PSE.Clients.API.Application.Commands
 {
-    public class CustomerCommandHandler : CommandHandler, IRequestHandler<RegisterCustomerCommand, ValidationResult>
+    public class CustomerCommandHandler : CommandHandler, IRequestHandler<CustomerRegisterCommand, ValidationResult>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -17,7 +18,7 @@ namespace PSE.Clients.API.Application.Commands
             _customerRepository = customerRepository;
         }
 
-        public async Task<ValidationResult> Handle(RegisterCustomerCommand message, CancellationToken cancellationToken)
+        public async Task<ValidationResult> Handle(CustomerRegisterCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid()) return message.ValidationResult;
 
@@ -32,6 +33,8 @@ namespace PSE.Clients.API.Application.Commands
             }
 
             _customerRepository.Add(customer);
+
+            customer.AddEvent(new CustomerRegisteredEvent(message.Id, message.Name, message.Email, message.Cpf));
 
             return await PersistToBase(_customerRepository.UnitOfWork);
         }
