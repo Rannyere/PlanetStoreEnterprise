@@ -1,10 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PSE.WebApp.MVC.Extensions;
 
 namespace PSE.WebApp.MVC.Models
 {
     public class RegisterUser
     {
+        [Required(ErrorMessage = "The {0} field is mandatory")]
+        [DisplayName("Name")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "The {0} field is mandatory")]
+        [DisplayName("CPF")]
+        [Cpf]
+        public string Cpf { get; set; }
+
         [Required(ErrorMessage = "The {0} field is mandatory")]
         [EmailAddress(ErrorMessage = "The {0} field is in an invalid format")]
         public string Email { get; set; }

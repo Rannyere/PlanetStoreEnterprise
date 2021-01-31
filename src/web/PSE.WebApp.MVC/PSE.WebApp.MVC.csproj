@@ -32,4 +32,9 @@
     <Content Remove="wwwroot\images\logo.png" />
     <Content Remove="wwwroot\images\banners\planetstore_background.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
