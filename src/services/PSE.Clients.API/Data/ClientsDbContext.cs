@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using PSE.Clients.API.Models;
 using PSE.Core.Data;
 using PSE.Core.DomainObjects;
 using PSE.Core.Mediator;
+using PSE.Core.Messages;
 
 namespace PSE.Clients.API.Data
 {
@@ -27,6 +29,10 @@ namespace PSE.Clients.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //configuration for EF ignore these properties
+            modelBuilder.Ignore<ValidationResult>();
+            modelBuilder.Ignore<Event>();
+
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");

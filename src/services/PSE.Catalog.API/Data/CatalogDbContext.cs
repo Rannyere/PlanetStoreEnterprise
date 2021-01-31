@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using PSE.Catalog.API.Models;
 using PSE.Core.Data;
+using PSE.Core.Messages;
 
 namespace PSE.Catalog.API.Data
 {
@@ -15,6 +17,10 @@ namespace PSE.Catalog.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //configuration for EF ignore these properties
+            modelBuilder.Ignore<ValidationResult>();
+            modelBuilder.Ignore<Event>();
+
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");

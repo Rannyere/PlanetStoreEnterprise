@@ -15,14 +15,14 @@ namespace PSE.Core.Mediator
             _mediator = mediator;
         }
 
-        public Task PublishEvent<T>(T publishEvent) where T : Event
+        public async Task PublishEvent<T>(T publishEvent) where T : Event
         {
-            throw new NotImplementedException();
+            await _mediator.Publish(publishEvent);
         }
 
-        public Task<ValidationResult> SendCommand<T>(T comand) where T : Command
+        public async Task<ValidationResult> SendCommand<T>(T command) where T : Command
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(command);
         }
     }
 }
