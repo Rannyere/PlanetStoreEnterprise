@@ -7,6 +7,12 @@ namespace PSE.Identification.API.Models
     public class RegisterUser
     {
         [Required(ErrorMessage = "The {0} field is mandatory")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "The {0} field is mandatory")]
+        public string Cpf { get; set; }
+
+        [Required(ErrorMessage = "The {0} field is mandatory")]
         [EmailAddress(ErrorMessage = "The {0} field is in an invalid format")]
         public string Email { get; set; }
 

@@ -5,10 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using EasyNetQ;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PSE.Core.Messages.Integration;
 using PSE.Identification.API.Models;
 using PSE.WebAPI.Core.Controllers;
 using PSE.WebAPI.Core.Identification;
@@ -22,9 +24,11 @@ namespace PSE.Identification.API.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
 
+        private IBus _bus;
+
         public AuthController(SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
-                              IOptions<AppSettings> appSettings)
+                              IOptions<AppSettings> appSettings)                           
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -47,6 +51,9 @@ namespace PSE.Identification.API.Controllers
 
             if (result.Succeeded)
             {
+                // integration PSE.Clients.API
+                var success = await RegisterCustomer(registerUser);
+
                 return CustomResponse(await GenerateJwt(registerUser.Email));
             }
 
@@ -56,6 +63,19 @@ namespace PSE.Identification.API.Controllers
             }
 
             return CustomResponse();
+        }
+
+        private async Task<ResponseMessage> RegisterCustomer(RegisterUser registerUser)
+        {
+            var user = await _userManager.FindByEmailAsync(registerUser.Email);
+            var userRegistered = new UserRegisteredIntegrationEvent(
+                Guid.Parse(user.Id), registerUser.Name, registerUser.Email, registerUser.Cpf);
+
+            _bus = RabbitHutch.CreateBus("host=localhost:5672");
+
+            var success = await _bus.Rpc.RequestAsync<UserRegisteredIntegrationEvent, ResponseMessage>(userRegistered);
+
+            return success;
         }
 
         [HttpPost("login")]

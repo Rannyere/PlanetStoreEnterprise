@@ -10,6 +10,7 @@
     <Folder Include="Utils\" />
     <Folder Include="Messages\" />
     <Folder Include="Mediator\" />
+    <Folder Include="Messages\Integration\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="9.4.0" />

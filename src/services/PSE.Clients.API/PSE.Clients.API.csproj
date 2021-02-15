@@ -15,6 +15,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="EasyNetQ" Version="6.3.1" />
   </ItemGroup>
             
   <ItemGroup>
@@ -28,6 +29,7 @@
     <Folder Include="Application\Events\" />
     <Folder Include="Application\Queries\" />
     <Folder Include="Data\Repository\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\WeatherForecastController.cs" />

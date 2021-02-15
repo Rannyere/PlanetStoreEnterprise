@@ -18,7 +18,7 @@ namespace PSE.Clients.API.Controllers
             _mediatorHandler = mediatorHandler;
         }
 
-        [HttpGet("clientes")]
+        [HttpGet("clients")]
         public async Task<IActionResult> Index()
         {
             //Test
