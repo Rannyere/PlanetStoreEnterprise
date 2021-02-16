@@ -7,7 +7,6 @@ using PSE.Clients.API.Application.Events;
 using PSE.Clients.API.Data;
 using PSE.Clients.API.Data.Repository;
 using PSE.Clients.API.Models;
-using PSE.Clients.API.Services;
 using PSE.Core.Mediator;
 
 namespace PSE.Clients.API.Configuration
@@ -23,8 +22,6 @@ namespace PSE.Clients.API.Configuration
             services.AddScoped<IRequestHandler<CustomerRegisterCommand, ValidationResult>, CustomerCommandHandler>();
 
             services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
-
-            services.AddHostedService<RegisterCustomerIntegrationHandler>(); //singleton
         }
     }
 }

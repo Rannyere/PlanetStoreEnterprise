@@ -39,7 +39,7 @@ namespace PSE.WebApp.MVC.Controllers
 
             await ConnectAccount(response);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Catalog");
 
         }
 

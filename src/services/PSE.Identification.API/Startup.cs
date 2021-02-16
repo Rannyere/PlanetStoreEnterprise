@@ -36,6 +36,8 @@ namespace PSE.Identification.API
             services.AddApiConfiguration();
 
             services.AddSwaggerConfiguration();
+
+            services.AddMessageBusConfiguration(Configuration);
         }
 
         
