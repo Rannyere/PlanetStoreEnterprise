@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using PSE.WebApp.Core.User;
 using PSE.WebApp.MVC.Extensions;
 using PSE.WebApp.MVC.Services;
 using PSE.WebApp.MVC.Services.Handlers;
@@ -35,7 +36,7 @@ namespace PSE.WebApp.MVC.Configuration
             #endregion
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUser, AspNetUser>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
         }
     }
 }

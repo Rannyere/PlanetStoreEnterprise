@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace PSE.WebApp.MVC.Extensions
+namespace PSE.WebApp.Core.User
 {
     public static class ClaimsPrincipalExtensions
     {

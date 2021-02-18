@@ -4,15 +4,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using PSE.WebApp.MVC.Extensions;
+using PSE.WebApp.Core.User;
 
 namespace PSE.WebApp.MVC.Services.Handlers
 {
     public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
     {
-        private readonly IUser _user;
+        private readonly IAspNetUser _user;
 
-        public HttpClientAuthorizationDelegatingHandler(IUser user)
+        public HttpClientAuthorizationDelegatingHandler(IAspNetUser user)
         {
             _user = user;
         }

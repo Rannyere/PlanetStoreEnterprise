@@ -36,5 +36,8 @@
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>
