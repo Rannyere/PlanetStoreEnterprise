@@ -19,3 +19,7 @@ ClientsDbContext:
 dotnet ef migrations add initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
 dotnet ef database update initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
 
+Migration PSE.Cart.API:
+CartDbContext:
+dotnet ef migrations add initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose
+dotnet ef database update initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose

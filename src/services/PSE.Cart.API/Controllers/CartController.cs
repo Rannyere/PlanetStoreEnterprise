@@ -1,5 +1,6 @@
 ﻿using System;
-namespace PSE.Cart.API.Configuration
+
+namespace PSE.Cart.API.Controllers
 {
     public class CartController
     {

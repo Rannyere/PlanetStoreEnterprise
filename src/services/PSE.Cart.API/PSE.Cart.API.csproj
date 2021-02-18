@@ -21,6 +21,7 @@
     <Folder Include="Configuration\" />
     <Folder Include="Data\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">
