@@ -14,7 +14,7 @@ namespace PSE.Cart.API.Data
             ChangeTracker.AutoDetectChangesEnabled = false;
         }
 
-        public DbSet<CartItem> CartItens { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<CartCustomer> CartCustomers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,7 +28,7 @@ namespace PSE.Cart.API.Data
                 .HasName("IDX_Customer");
 
             modelBuilder.Entity<CartCustomer>()
-                .HasMany(c => c.Itens)
+                .HasMany(c => c.Items)
                 .WithOne(i => i.CartCustomer)
                 .HasForeignKey(c => c.CartId);
 
