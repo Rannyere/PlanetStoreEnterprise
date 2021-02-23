@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace PSE.Cart.API.Models
@@ -13,6 +14,7 @@ namespace PSE.Cart.API.Models
         public Guid CustomerId { get; set; }
         public decimal TotalValue { get; set; }
         public List<CartItem> Items { get; set; } = new List<CartItem>();
+        public ValidationResult ValidationResult { get; set; }
 
         public CartCustomer(Guid customerId) 
         {
@@ -54,6 +56,57 @@ namespace PSE.Cart.API.Models
 
             Items.Add(item);
             CalculateTotalCart();
+        }
+
+        internal void UpdateExistingItem(CartItem item)
+        {
+            item.LinkCart(Id);
+
+            var itemExisting = GetProductById(item.ProductId);
+
+            Items.Remove(itemExisting);
+            Items.Add(item);
+
+            CalculateTotalCart();
+        }
+
+        internal void UpdateUnits(CartItem item, int units)
+        {
+            item.UpdateUnits(units);
+            UpdateExistingItem(item);
+        }
+
+        internal void RemoveItem(CartItem item)
+        {
+            Items.Remove(GetProductById(item.ProductId));
+            CalculateTotalCart();
+        }
+
+        internal bool IsValid()
+        {
+            var errors = Items.SelectMany(i => new CartItem.CartItemValidation().Validate(i).Errors).ToList();
+            errors.AddRange(new CartCustomerValidation().Validate(this).Errors);
+            ValidationResult = new ValidationResult(errors);
+
+            return ValidationResult.IsValid;
+        }
+
+        public class CartCustomerValidation : AbstractValidator<CartCustomer>
+        {
+            public CartCustomerValidation()
+            {
+                RuleFor(c => c.CustomerId)
+                    .NotEqual(Guid.Empty)
+                    .WithMessage("Customer not found");
+
+                RuleFor(c => c.Items.Count)
+                    .GreaterThan(0)
+                    .WithMessage("The cart has no items");
+
+                RuleFor(c => c.TotalValue)
+                    .GreaterThan(0)
+                    .WithMessage("Total cart value must be greater than 0");
+            }
         }
     }
 }
