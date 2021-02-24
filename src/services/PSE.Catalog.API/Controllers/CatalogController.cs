@@ -26,7 +26,8 @@ namespace PSE.Catalog.API.Controllers
             return await _productRepository.GetAll();
         }
 
-        [ClaimsAuthorize("Catalog", "Read")]
+        //[ClaimsAuthorize("Catalog", "Read")]
+        [AllowAnonymous]
         [HttpGet("catalog/products/{id}")]
         public async Task<Product> ProductDetail(Guid id)
         {

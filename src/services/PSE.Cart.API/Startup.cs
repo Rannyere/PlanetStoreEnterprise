@@ -36,6 +36,8 @@ namespace PSE.Cart.API
             services.AddJwtConfiguration(Configuration);
 
             services.AddSwaggerConfiguration();
+
+            services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

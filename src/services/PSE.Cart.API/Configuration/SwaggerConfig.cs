@@ -13,7 +13,7 @@ namespace PSE.Cart.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "PlanetStore - PSE.Cart.API",
+                    Title = "PlanetStore - Cart API",
                     Description = "This API is responsible for cart control",
                     Contact = new OpenApiContact() { Name = "Rannyere Almeida", Email = "rannyalmeida27@hotmail.com" },
                     //License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }

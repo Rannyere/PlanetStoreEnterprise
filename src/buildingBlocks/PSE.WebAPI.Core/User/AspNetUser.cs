@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace PSE.WebApp.Core.User
+namespace PSE.WebAPI.Core.User
 {
     public class AspNetUser : IAspNetUser
     {

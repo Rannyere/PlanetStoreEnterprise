@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using FluentValidation;
 
 namespace PSE.Cart.API.Models
@@ -15,13 +16,16 @@ namespace PSE.Cart.API.Models
         public Guid CartId { get; set; }
 
         /* Entity Framework Relation */
+        [JsonIgnore]
         public CartCustomer CartCustomer { get; set; }
 
-        public CartItem( ) { }
+        public CartItem( )
+        {
+            Id = Guid.NewGuid();
+        }
 
         internal void LinkCart(Guid cartId)
         {
-            Id = Guid.NewGuid();
             CartId = cartId;
         }
 

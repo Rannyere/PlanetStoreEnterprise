@@ -16,6 +16,8 @@
     <Folder Include="wwwroot\images\avatars\" />
     <Folder Include="Views\Catalog\" />
     <Folder Include="Services\Handlers\" />
+    <Folder Include="Views\Cart\" />
+    <Folder Include="Views\Shared\Components\Cart\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />

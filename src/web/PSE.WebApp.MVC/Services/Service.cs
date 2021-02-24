@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using PSE.WebApp.MVC.Extensions;
+using PSE.WebApp.MVC.Models;
 
 namespace PSE.WebApp.MVC.Services
 {
@@ -44,6 +45,11 @@ namespace PSE.WebApp.MVC.Services
 
             response.EnsureSuccessStatusCode();
             return true;
+        }
+
+        protected ResponseErrorResult ReturnOk()
+        {
+            return new ResponseErrorResult();
         }
     }
 }

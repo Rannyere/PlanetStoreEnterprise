@@ -5,5 +5,6 @@ namespace PSE.WebApp.MVC.Extensions
     {
         public string BasePathUrl { get; set; }
         public string CatalogUrl { get; set; }
+        public string CartUrl { get; set; }
     }
 }

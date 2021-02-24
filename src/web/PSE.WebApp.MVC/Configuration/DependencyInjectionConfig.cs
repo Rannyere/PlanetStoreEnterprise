@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
-using PSE.WebApp.Core.User;
+using PSE.WebAPI.Core.User;
 using PSE.WebApp.MVC.Extensions;
 using PSE.WebApp.MVC.Services;
 using PSE.WebApp.MVC.Services.Handlers;
@@ -14,9 +15,19 @@ namespace PSE.WebApp.MVC.Configuration
     {
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
+
+
+            #region httpServices
+
             services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 
-            services.AddHttpClient<IAuthenticateService, AuthenticateService>();
+            services.AddHttpClient<IAuthenticateService, AuthenticateService>()
+                .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddHttpClient<ICatalogService, CatalogService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
@@ -25,6 +36,14 @@ namespace PSE.WebApp.MVC.Configuration
                 .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<ICartService, CartService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                .AddPolicyHandler(PollyExtensions.WaitAndRetry())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            #endregion
 
             #region Refit
             //services.AddHttpClient("Refit", options =>
@@ -35,8 +54,7 @@ namespace PSE.WebApp.MVC.Configuration
             //    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             #endregion
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAspNetUser, AspNetUser>();
+
         }
     }
 }

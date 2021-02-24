@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PSE.Cart.API.Data;
 using PSE.Cart.API.Models;
 using PSE.WebAPI.Core.Controllers;
-using PSE.WebApp.Core.User;
+using PSE.WebAPI.Core.User;
 
 namespace PSE.Cart.API.Controllers
 {
+    [Authorize]
     public class CartController : MainController
     {
         private readonly IAspNetUser _user;
@@ -38,8 +40,7 @@ namespace PSE.Cart.API.Controllers
             else
                 ManipulateExistingCart(cart, item);
 
-            ValidateCart(cart);
-            if (ValidOperation()) return CustomResponse();
+            if (!ValidOperation()) return CustomResponse();
 
             await PersistBase();
 
@@ -91,6 +92,7 @@ namespace PSE.Cart.API.Controllers
             var cart = new CartCustomer(_user.GetUserId());
             cart.AddNewItem(item);
 
+            ValidateCart(cart);
             _cartDbContext.CartCustomers.Add(cart);
         }
 
@@ -99,6 +101,7 @@ namespace PSE.Cart.API.Controllers
             var productExisting = cart.CartItemExisting(item);
 
             cart.AddNewItem(item);
+            ValidateCart(cart);
 
             if (productExisting)
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace PSE.WebApp.Core.User
+namespace PSE.WebAPI.Core.User
 {
     public static class ClaimsPrincipalExtensions
     {
@@ -12,7 +12,7 @@ namespace PSE.WebApp.Core.User
                 throw new ArgumentException(nameof(principal));
             }
 
-            var claim = principal.FindFirst("sub");
+            var claim = principal.FindFirst(ClaimTypes.NameIdentifier);
             return claim?.Value;
         }
 

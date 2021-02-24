@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using PSE.WebApp.Core.User;
+using PSE.WebAPI.Core.User;
 
 namespace PSE.WebApp.MVC.Services.Handlers
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using PSE.Cart.API.Data;
-using PSE.WebApp.Core.User;
+using PSE.WebAPI.Core.User;
 
 namespace PSE.Cart.API.Configuration
 {
