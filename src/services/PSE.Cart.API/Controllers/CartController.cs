@@ -57,7 +57,7 @@ namespace PSE.Cart.API.Controllers
             cart.UpdateUnits(itemCart, item.Quantity);
 
             ValidateCart(cart);
-            if (ValidOperation()) return CustomResponse();
+            if (!ValidOperation()) return CustomResponse();
 
             _cartDbContext.CartCustomers.Update(cart);
             _cartDbContext.CartItems.Update(itemCart);
@@ -74,10 +74,10 @@ namespace PSE.Cart.API.Controllers
             var itemCart = await ValidateItem(productId, cart);
             if (itemCart == null) return CustomResponse();
 
-            cart.RemoveItem(itemCart);
-
             ValidateCart(cart);
-            if (ValidOperation()) return CustomResponse();
+            if (!ValidOperation()) return CustomResponse();
+
+            cart.RemoveItem(itemCart);
 
             _cartDbContext.CartItems.Remove(itemCart);
             _cartDbContext.CartCustomers.Update(cart);

@@ -67,7 +67,7 @@ namespace PSE.Cart.API.Models
 
                 RuleFor(c => c.Quantity)
                     .LessThanOrEqualTo(CartCustomer.MAX_QUANTITY_ITEM)
-                    .WithMessage(item => $"The maximum order quantity for {item.Name} is 1 {CartCustomer.MAX_QUANTITY_ITEM}");
+                    .WithMessage(item => $"The maximum order quantity for {item.Name} is {CartCustomer.MAX_QUANTITY_ITEM}");
 
                 RuleFor(c => c.Value)
                     .GreaterThan(0)
