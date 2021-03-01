@@ -16,6 +16,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Services\" />
     <Folder Include="Configurations\" />
+    <Folder Include="DTOs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">

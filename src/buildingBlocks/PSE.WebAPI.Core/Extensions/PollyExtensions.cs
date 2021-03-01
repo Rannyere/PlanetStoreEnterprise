@@ -4,7 +4,7 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
 
-namespace PSE.WebApp.MVC.Extensions
+namespace PSE.WebAPI.Core.Extensions
 {
     public static class PollyExtensions
     {
@@ -17,11 +17,6 @@ namespace PSE.WebApp.MVC.Extensions
                     TimeSpan.FromSeconds(1),
                     TimeSpan.FromSeconds(5),
                     TimeSpan.FromSeconds(10),
-                }, (outcome, timespan, retryCount, context) =>
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine($"Attempt: {retryCount}");
-                    Console.ForegroundColor = ConsoleColor.White;
                 });
 
             return retry;

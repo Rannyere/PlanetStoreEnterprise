@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PSE.Core.Responses;
 using PSE.WebApp.MVC.Models;
 
 namespace PSE.WebApp.MVC.Services

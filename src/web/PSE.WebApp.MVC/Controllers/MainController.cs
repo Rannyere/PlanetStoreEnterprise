@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using PSE.Core.Responses;
 using PSE.WebApp.MVC.Models;
 
 namespace PSE.WebApp.MVC.Controllers

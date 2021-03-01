@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using PSE.Core.Responses;
 using PSE.WebApp.MVC.Extensions;
 using PSE.WebApp.MVC.Models;
 

@@ -1,7 +1,12 @@
 ﻿using System;
 namespace PSE.Sales.BFF.Services
 {
-    public class OrderService
+    public interface IOrderService
+    {
+
+    }
+
+    public class OrderService : Service, IOrderService
     {
         public OrderService()
         {

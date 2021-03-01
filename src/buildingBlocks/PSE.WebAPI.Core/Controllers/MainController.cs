@@ -4,6 +4,7 @@ using System.Linq;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using PSE.Core.Responses;
 
 namespace PSE.WebAPI.Core.Controllers
 {
@@ -45,6 +46,26 @@ namespace PSE.WebAPI.Core.Controllers
 
             return CustomResponse();
         }
+
+        protected ActionResult CustomResponse(ResponseErrorResult response)
+        {
+            ResponseHasErrors(response);
+
+            return CustomResponse();
+        }
+
+        protected bool ResponseHasErrors(ResponseErrorResult response)
+        {
+            if (response == null || !response.Errors.Messages.Any()) return false;
+
+            foreach (var mensagem in response.Errors.Messages)
+            {
+                AddErrorInProcess(mensagem);
+            }
+
+            return true;
+        }
+
 
         protected bool ValidOperation()
         {

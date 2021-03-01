@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PSE.Core.Responses;
 
 namespace PSE.WebApp.MVC.Models
 {

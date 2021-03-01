@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using PSE.Core.Responses;
-using PSE.WebApp.MVC.Extensions;
-using PSE.WebApp.MVC.Models;
 
-namespace PSE.WebApp.MVC.Services
+namespace PSE.Sales.BFF.Services
 {
     public abstract class Service
     {
@@ -31,18 +30,7 @@ namespace PSE.WebApp.MVC.Services
 
         protected bool CheckErrorsResponse(HttpResponseMessage response)
         {
-            switch ((int)response.StatusCode)
-            {
-                case 401:
-                case 403:
-                case 404:
-                case 500:
-                    throw new CustomHttpResponseException(response.StatusCode);
-
-                //in this case, there is an error message within the API response
-                case 400:
-                    return false;
-            }
+            if (response.StatusCode == HttpStatusCode.BadRequest) return false;
 
             response.EnsureSuccessStatusCode();
             return true;
@@ -54,3 +42,4 @@ namespace PSE.WebApp.MVC.Services
         }
     }
 }
+
