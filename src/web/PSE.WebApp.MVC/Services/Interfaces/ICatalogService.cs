@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PSE.WebApp.MVC.Models;
-using Refit;
 
-namespace PSE.WebApp.MVC.Services
+namespace PSE.WebApp.MVC.Services.Interfaces
 {
-    public interface ICatalogServiceRefit
+    public interface ICatalogService
     {
-        [Get("/catalog/products/")]
         Task<IEnumerable<ProductViewModel>> GetAllProducts();
 
-        [Get("/catalog/products/{id}")]
         Task<ProductViewModel> GetProductById(Guid id);
     }
+
 }

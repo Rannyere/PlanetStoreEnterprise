@@ -8,6 +8,7 @@ using PSE.WebAPI.Core.User;
 using PSE.WebApp.MVC.Extensions;
 using PSE.WebApp.MVC.Services;
 using PSE.WebApp.MVC.Services.Handlers;
+using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Configuration
 {
@@ -37,7 +38,7 @@ namespace PSE.WebApp.MVC.Configuration
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
-            services.AddHttpClient<ICartService, CartService>()
+            services.AddHttpClient<ISalesBffService, SalesBffService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
                 .AddPolicyHandler(PollyExtensions.WaitAndRetry())
                 .AddTransientHttpErrorPolicy(

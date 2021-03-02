@@ -18,6 +18,7 @@
     <Folder Include="Services\Handlers\" />
     <Folder Include="Views\Cart\" />
     <Folder Include="Views\Shared\Components\Cart\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />

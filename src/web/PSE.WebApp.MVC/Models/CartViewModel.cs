@@ -6,10 +6,10 @@ namespace PSE.WebApp.MVC.Models
     public class CartCustomerViewModel
     {
         public decimal TotalValue { get; set; }
-        public List<CartProductViewModel> Items { get; set; } = new List<CartProductViewModel>();
+        public List<ItemCartViewModel> Items { get; set; } = new List<ItemCartViewModel>();
     }
 
-    public class CartProductViewModel
+    public class ItemCartViewModel
     {
         public Guid ProductId { get; set; }
         public string Name { get; set; }

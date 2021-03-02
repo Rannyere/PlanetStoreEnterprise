@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PSE.WebApp.MVC.Services;
+using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Controllers
 {

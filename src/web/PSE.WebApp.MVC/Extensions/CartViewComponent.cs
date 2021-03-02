@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PSE.WebApp.MVC.Models;
-using PSE.WebApp.MVC.Services;
+using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Extensions
 {
     public class CartViewComponent : ViewComponent
     {
-        private readonly ICartService _cartService;
+        private readonly ISalesBffService _salesService;
 
-        public CartViewComponent(ICartService cartService)
+        public CartViewComponent(ISalesBffService salesService)
         {
-            _cartService = cartService;
+            _salesService = salesService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _cartService.GetCart() ?? new CartCustomerViewModel());
+            return View(await _salesService.GetQuantityProductsInCart());
         }
     }
 }

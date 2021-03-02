@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using PSE.WebApp.MVC.Models;
-using PSE.WebApp.MVC.Services;
+using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Controllers
 {

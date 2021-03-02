@@ -5,7 +5,7 @@
     <UserSecretsId>d92a0797-7b53-4482-a4f8-e88e43f379f5</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SefHosting - Development' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SefHosting' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>

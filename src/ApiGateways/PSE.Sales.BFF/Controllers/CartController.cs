@@ -37,7 +37,7 @@ namespace PSE.Sales.BFF.Controllers
         }
 
         [HttpPost]
-        [Route("sales/cart/products")]
+        [Route("sales/cart/product")]
         public async Task<IActionResult> AddProductCart(ItemCartDTO itemCart)
         {
             var productCatalog = await _catalogService.GetProductById(itemCart.ProductId);
