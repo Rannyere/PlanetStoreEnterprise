@@ -18,38 +18,43 @@ The PlanetStore is an E-commerce built with .NetCore 3.1 technology, through dis
 REQUIREMENTS
 ------------
 
-.Net Core 3.1
-Idenityt
-EntityFramework
-JWT
-EasyNetQ(RabbitMQ)
-Swashbuckle
-MediatR
-More...
-
+ * .Net Core 3.1
+ * Identity
+ * EntityFramework
+ * JWT
+ * EasyNetQ(RabbitMQ)
+ * Swashbuckle(swagger)
+ * MediatR
+ * More...
+ 
 
 GENERATE DATABASE
 -----------------
 
 * Migration PSE.Identification.API:
-    ApplicationDbContext:  
-      dotnet ef migrations add initial_data_Identification --project PSE.Identification.API -s PSE.Identification.API --context ApplicationDbContext --verbose 
-      dotnet ef database update initial_data_Identification --project PSE.Identification.API -s PSE.Identification.API --context ApplicationDbContext --verbose
+  * ApplicationDbContext:  
+    *  dotnet ef migrations add initial_data_Identification --project PSE.Identification.API -s PSE.Identification.API --context ApplicationDbContext --verbose 
+    *  dotnet ef database update initial_data_Identification --project PSE.Identification.API -s PSE.Identification.API --context ApplicationDbContext --verbose
 
 * Migration PSE.Catalog.API:
-    CatalogDbContext:
-      dotnet ef migrations add initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose 
-      dotnet ef database update initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose
+  * CatalogDbContext:
+    *  dotnet ef migrations add initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose 
+    *  dotnet ef database update initial_data_Catalog --project PSE.Catalog.API -s PSE.Catalog.API --context CatalogDbContext --verbose
 
 * Migration PSE.Clients.API:
-    ClientsDbContext:
-      dotnet ef migrations add initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
-      dotnet ef database update initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
+  * ClientsDbContext:
+    *  dotnet ef migrations add initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
+    *  dotnet ef database update initial_data_Clients --project PSE.Clients.API -s PSE.Clients.API --context ClientsDbContext --verbose
 
 * Migration PSE.Cart.API:
-    CartDbContext:
-      dotnet ef migrations add initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose
-      dotnet ef database update initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose
+  * CartDbContext:
+    *  dotnet ef migrations add initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose
+    *  dotnet ef database update initial_data_Cart --project PSE.Cart.API -s PSE.Cart.API --context CartDbContext --verbose
+
+* Migration PSE.Order.API
+  * OrderDbContext:
+    *  dotnet ef migrations add Voucher --project PSE.Order.Infra -s PSE.Order.API --context OrderDbContext --verbose
+    *  dotnet ef database update Voucher --project PSE.Order.Infra -s PSE.Order.API --context OrderDbContext --verbose
 
 
 MAINTAINERS

@@ -11,6 +11,9 @@ namespace PSE.Order.Infra.Data.Mappings
         {
             builder.HasKey(c => c.Id);
 
+            builder.Property(c => c.Code)
+                .IsRequired()
+                .HasColumnType("varchar(100)");
 
             builder.ToTable("Vouchers");
         }
