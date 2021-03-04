@@ -5,6 +5,7 @@
     <UserSecretsId>9ffcd156-f13b-4b26-bfee-6e9f856f9376</UserSecretsId>
   </PropertyGroup>
   
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SefHosting' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.10" />
@@ -23,6 +24,7 @@
     <Folder Include="Application\Events\" />
     <Folder Include="Application\Queries\" />
     <Folder Include="Configuration\" />
+    <Folder Include="Application\DTOs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">

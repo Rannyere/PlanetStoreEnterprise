@@ -13,7 +13,7 @@ namespace PSE.Order.Infra.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Code = table.Column<string>(type: "varchar(100)", nullable: false),
-                    Percentage = table.Column<decimal>(nullable: true),
+                    DiscountPercentage = table.Column<decimal>(nullable: true),
                     DiscountValue = table.Column<decimal>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
                     DiscountType = table.Column<int>(nullable: false),

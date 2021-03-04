@@ -39,13 +39,13 @@ namespace PSE.Order.Infra.Migrations
                     b.Property<DateTime>("DateValidity")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<decimal?>("DiscountPercentage")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<int>("DiscountType")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("DiscountValue")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal?>("Percentage")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("Quantity")

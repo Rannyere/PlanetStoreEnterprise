@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using PSE.Core.Data;
 using PSE.Core.DomainObjects;
 using PSE.Core.Mediator;
 using PSE.Core.Messages;
@@ -10,7 +11,7 @@ using PSE.Order.Domain.Vouchers;
 
 namespace PSE.Order.Infra.Data
 {
-    public class OrderDbContext : DbContext
+    public class OrderDbContext : DbContext, IUnityOfWork
     {
         private readonly IMediatorHandler _mediatorHandler;
 
