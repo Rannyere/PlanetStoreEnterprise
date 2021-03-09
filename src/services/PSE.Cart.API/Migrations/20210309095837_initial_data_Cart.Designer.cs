@@ -9,7 +9,7 @@ using PSE.Cart.API.Data;
 namespace PSE.Cart.API.Migrations
 {
     [DbContext(typeof(CartDbContext))]
-    [Migration("20210216114347_initial_data_Cart")]
+    [Migration("20210309095837_initial_data_Cart")]
     partial class initial_data_Cart
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,14 @@ namespace PSE.Cart.API.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<bool>("VoucherUsage")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -67,13 +73,45 @@ namespace PSE.Cart.API.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("CartItens");
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("PSE.Cart.API.Models.CartCustomer", b =>
+                {
+                    b.OwnsOne("PSE.Cart.API.Models.Voucher", "Voucher", b1 =>
+                        {
+                            b1.Property<Guid>("CartCustomerId")
+                                .HasColumnType("char(36)");
+
+                            b1.Property<string>("Code")
+                                .HasColumnName("VoucherCode")
+                                .HasColumnType("varchar(50)");
+
+                            b1.Property<decimal?>("DiscountPercentage")
+                                .HasColumnName("DiscountPercentage")
+                                .HasColumnType("decimal(65,30)");
+
+                            b1.Property<int>("DiscountType")
+                                .HasColumnName("DiscountType")
+                                .HasColumnType("int");
+
+                            b1.Property<decimal?>("DiscountValue")
+                                .HasColumnName("DiscountValue")
+                                .HasColumnType("decimal(65,30)");
+
+                            b1.HasKey("CartCustomerId");
+
+                            b1.ToTable("CartCustomers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CartCustomerId");
+                        });
                 });
 
             modelBuilder.Entity("PSE.Cart.API.Models.CartItem", b =>
                 {
                     b.HasOne("PSE.Cart.API.Models.CartCustomer", "CartCustomer")
-                        .WithMany("Itens")
+                        .WithMany("Items")
                         .HasForeignKey("CartId")
                         .IsRequired();
                 });

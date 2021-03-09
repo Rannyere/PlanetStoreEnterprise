@@ -87,6 +87,20 @@ namespace PSE.Cart.API.Controllers
             return CustomResponse();
         }
 
+        [HttpPost]
+        [Route("cart/apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher(Voucher voucher)
+        {
+            var cartCustomer = await GetCartCustomer();
+
+            cartCustomer.ApplyVoucher(voucher);
+
+            _cartDbContext.CartCustomers.Update(cartCustomer);
+
+            await PersistBase();
+            return CustomResponse();
+        }
+
         private void ManipulateNewCart(CartItem item)
         {
             var cart = new CartCustomer(_user.GetUserId());

@@ -31,9 +31,28 @@ namespace PSE.Cart.API.Data
                 .HasName("IDX_Customer");
 
             modelBuilder.Entity<CartCustomer>()
+                .Ignore(c => c.Voucher)
+                .OwnsOne(c => c.Voucher, v =>
+                {
+                    v.Property(vc => vc.Code)
+                        .HasColumnName("VoucherCode")
+                        .HasColumnType("varchar(50)");
+
+                    v.Property(vc => vc.DiscountType)
+                        .HasColumnName("DiscountType");
+
+                    v.Property(vc => vc.DiscountPercentage)
+                        .HasColumnName("DiscountPercentage");
+
+                    v.Property(vc => vc.DiscountValue)
+                        .HasColumnName("DiscountValue");
+                });
+
+            modelBuilder.Entity<CartCustomer>()
                 .HasMany(c => c.Items)
                 .WithOne(i => i.CartCustomer)
                 .HasForeignKey(c => c.CartId);
+
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
         }

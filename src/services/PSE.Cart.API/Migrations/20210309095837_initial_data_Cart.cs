@@ -13,7 +13,13 @@ namespace PSE.Cart.API.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CustomerId = table.Column<Guid>(nullable: false),
-                    TotalValue = table.Column<decimal>(nullable: false)
+                    TotalValue = table.Column<decimal>(nullable: false),
+                    VoucherUsage = table.Column<bool>(nullable: false),
+                    Discount = table.Column<decimal>(nullable: false),
+                    VoucherCode = table.Column<string>(type: "varchar(50)", nullable: true),
+                    DiscountPercentage = table.Column<decimal>(nullable: true),
+                    DiscountValue = table.Column<decimal>(nullable: true),
+                    DiscountType = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -21,7 +27,7 @@ namespace PSE.Cart.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartItens",
+                name: "CartItems",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -34,9 +40,9 @@ namespace PSE.Cart.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItens", x => x.Id);
+                    table.PrimaryKey("PK_CartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CartItens_CartCustomers_CartId",
+                        name: "FK_CartItems_CartCustomers_CartId",
                         column: x => x.CartId,
                         principalTable: "CartCustomers",
                         principalColumn: "Id",
@@ -49,15 +55,15 @@ namespace PSE.Cart.API.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItens_CartId",
-                table: "CartItens",
+                name: "IX_CartItems_CartId",
+                table: "CartItems",
                 column: "CartId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartItens");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "CartCustomers");
