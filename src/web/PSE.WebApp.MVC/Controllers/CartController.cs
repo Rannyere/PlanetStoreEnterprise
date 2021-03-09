@@ -56,5 +56,16 @@ namespace PSE.WebApp.MVC.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [Route("cart/apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher(string voucherCode)
+        {
+            var response = await _salesBffService.ApplyVoucherCart(voucherCode);
+
+            if (HasErrorsInResponse(response)) return View("Index", await _salesBffService.GetCart());
+
+            return RedirectToAction("Index");
+        }
     }
 }

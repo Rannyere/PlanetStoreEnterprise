@@ -49,7 +49,7 @@ namespace PSE.WebApp.MVC.Services
             return ReturnOk();
         }
 
-        public async Task<ResponseErrorResult> UpdateProductCart(Guid produtoId, ItemCartViewModel itemCart)
+        public async Task<ResponseErrorResult> UpdateProductCart(Guid productId, ItemCartViewModel itemCart)
         {
             var itemContent = GetContent(itemCart);
 
@@ -63,6 +63,17 @@ namespace PSE.WebApp.MVC.Services
         public async Task<ResponseErrorResult> RemoveProductCart(Guid productId)
         {
             var response = await _httpClient.DeleteAsync($"/sales/cart/product/{productId}");
+
+            if (!CheckErrorsResponse(response)) return await DeserializeObjectResponse<ResponseErrorResult>(response);
+
+            return ReturnOk();
+        }
+
+        public async Task<ResponseErrorResult> ApplyVoucherCart(string voucher)
+        {
+            var itemContent = GetContent(voucher);
+
+            var response = await _httpClient.PostAsync($"/sales/cart/apply-voucher/", itemContent);
 
             if (!CheckErrorsResponse(response)) return await DeserializeObjectResponse<ResponseErrorResult>(response);
 

@@ -18,7 +18,7 @@ namespace PSE.WebApp.MVC.Services
         public AuthenticateService(HttpClient httpClient,
                                    IOptions<AppSettings> settings)
         {
-            httpClient.BaseAddress = new Uri(settings.Value.BasePathUrl);
+            httpClient.BaseAddress = new Uri(settings.Value.IdentificationUrl);
 
             _httpClient = httpClient;
         }

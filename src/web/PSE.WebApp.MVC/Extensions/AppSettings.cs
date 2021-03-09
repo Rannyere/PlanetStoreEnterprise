@@ -3,9 +3,8 @@ namespace PSE.WebApp.MVC.Extensions
 {
     public class AppSettings
     {
-        public string BasePathUrl { get; set; }
+        public string IdentificationUrl { get; set; }
         public string CatalogUrl { get; set; }
-        public string CartUrl { get; set; }
         public string SalesUrl { get; set; }
     }
 }
