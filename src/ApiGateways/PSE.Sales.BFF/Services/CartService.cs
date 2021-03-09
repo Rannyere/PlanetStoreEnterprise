@@ -14,6 +14,7 @@ namespace PSE.Sales.BFF.Services
         Task<ResponseErrorResult> AddProductCart(ItemCartDTO product);
         Task<ResponseErrorResult> UpdateProductCart(Guid productId, ItemCartDTO product);
         Task<ResponseErrorResult> RemoveProductCart(Guid productId);
+        Task<ResponseErrorResult> ApplyVoucherCart(VoucherDTO voucher);
     }
 
     public class CartService : Service, ICartService
@@ -60,6 +61,17 @@ namespace PSE.Sales.BFF.Services
         public async Task<ResponseErrorResult> RemoveProductCart(Guid productId)
         {
             var response = await _httpClient.DeleteAsync($"/cart/{productId}");
+
+            if (!CheckErrorsResponse(response)) return await DeserializeObjectResponse<ResponseErrorResult>(response);
+
+            return ReturnOk();
+        }
+
+        public async Task<ResponseErrorResult> ApplyVoucherCart(VoucherDTO voucher)
+        {
+            var itemContent = GetContent(voucher);
+
+            var response = await _httpClient.PostAsync("/cart/apply-voucher/", itemContent);
 
             if (!CheckErrorsResponse(response)) return await DeserializeObjectResponse<ResponseErrorResult>(response);
 

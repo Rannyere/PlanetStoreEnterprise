@@ -14,11 +14,15 @@ namespace PSE.Sales.BFF.Controllers
     {
         private readonly ICartService _cartService;
         private readonly ICatalogService _catalogService;
+        private readonly IOrderService _orderService;
 
-        public CartController(ICartService cartService, ICatalogService catalogService)
+        public CartController(ICartService cartService,
+                              ICatalogService catalogService,
+                              IOrderService orderService)
         {
             _cartService = cartService;
             _catalogService = catalogService;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -81,6 +85,22 @@ namespace PSE.Sales.BFF.Controllers
             }
 
             var response = await _cartService.RemoveProductCart(productId);
+
+            return CustomResponse(response);
+        }
+
+        [HttpPost]
+        [Route("sales/cart/apply-voucher")]
+        public async Task<IActionResult> ApplyVoucher([FromBody] string voucherCode)
+        {
+            var voucher = await _orderService.GetVoucherByCode(voucherCode);
+            if (voucher is null)
+            {
+                AddErrorInProcess("Voucher invalid or not found!");
+                return CustomResponse();
+            }
+
+            var response = await _cartService.ApplyVoucherCart(voucher);
 
             return CustomResponse(response);
         }

@@ -22,7 +22,7 @@ namespace PSE.Order.API.Controllers
         [HttpGet("voucher/{code}")]
         [ProducesResponseType(typeof(VoucherDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> ObterPorCodigo(string code)
+        public async Task<IActionResult> GetByCode(string code)
         {
             if (string.IsNullOrEmpty(code)) return NotFound();
 
