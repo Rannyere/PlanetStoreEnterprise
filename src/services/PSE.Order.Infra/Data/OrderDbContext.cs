@@ -8,6 +8,7 @@ using PSE.Core.DomainObjects;
 using PSE.Core.Mediator;
 using PSE.Core.Messages;
 using PSE.Order.Domain.Vouchers;
+using PSE.Order.Domain.Orders;
 
 namespace PSE.Order.Infra.Data
 {
@@ -20,6 +21,9 @@ namespace PSE.Order.Infra.Data
         {
             _mediatorHandler = mediatorHandler;
         }
+
+        public DbSet<OrderCustomer> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
 
@@ -38,10 +42,31 @@ namespace PSE.Order.Infra.Data
                 .SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderDbContext).Assembly);
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+
+            //modelBuilder.HasSequence<int>("MySequence").StartsAt(1000).IncrementsBy(1);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public async Task<bool> Commit()
         {
+            foreach (var entry in ChangeTracker.Entries()
+                .Where(entry => entry.Entity.GetType().GetProperty("DateRegister") != null))
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("DateRegister").CurrentValue = DateTime.Now;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Property("DateRegister").IsModified = false;
+                }
+            }
+
             var success = await base.SaveChangesAsync() > 0;
             if (success) await _mediatorHandler.PublishEvents(this);
 
