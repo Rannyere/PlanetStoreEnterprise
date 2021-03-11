@@ -32,5 +32,13 @@ namespace PSE.Order.Domain.Vouchers
             Quantity = 0;
             DateUsage = DateTime.Now;
         }
+
+        public void DebitStock()
+        {
+            Quantity -= 1;
+            if (Quantity >= 1) return;
+
+            MarkAsUsage();
+        }
     }
 }

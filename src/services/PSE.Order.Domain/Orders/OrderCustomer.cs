@@ -28,15 +28,15 @@ namespace PSE.Order.Domain.Orders
         protected OrderCustomer() {}
 
         public OrderCustomer(Guid customerId, decimal totalValue, List<OrderItem> orderItems,
-                     Guid? voucherId = null, bool voucherUsage = false, decimal discount = 0)
+                     bool voucherUsage = false, decimal discount = 0, Guid? voucherId = null)
         {
             CustomerId = customerId;
             TotalValue = totalValue;
             _orderItems = orderItems;
 
-            VoucherId = voucherId;
             VoucherUsage = voucherUsage;
             Discount = discount;
+            VoucherId = voucherId;
         }
 
         public void AuthorizeOrder()
