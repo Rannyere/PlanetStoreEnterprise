@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSE.Cart.API.Data;
 
 namespace PSE.Cart.API.Migrations
 {
     [DbContext(typeof(CartDbContext))]
-    partial class CartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210312101757_CascadaDelete")]
+    partial class CascadaDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
