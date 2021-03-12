@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 using PSE.Core.Data;
 
@@ -11,6 +12,8 @@ namespace PSE.Order.Domain.Orders
         Task<IEnumerable<OrderCustomer>> GetListOrdersByCustomer(Guid customerId);
         void Add(OrderCustomer order);
         void Update(OrderCustomer order);
+
+        DbConnection GetConnection();
 
         /* Order Item */
         Task<OrderItem> GetItemById(Guid id);

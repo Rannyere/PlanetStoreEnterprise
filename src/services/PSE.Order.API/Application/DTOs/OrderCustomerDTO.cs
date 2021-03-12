@@ -15,7 +15,7 @@ namespace PSE.Order.API.Application.DTOs
         public bool VoucherUsage { get; set; }
         public decimal Discount { get; set; }
         public List<OrderItemDTO> OrderItems { get; set; }
-        public AddressDTO Address { get; private set; }
+        public AddressDTO Address { get; set; }
 
         public static OrderCustomerDTO ToOrderCustomerDTO(OrderCustomer orderCustomer)
         {

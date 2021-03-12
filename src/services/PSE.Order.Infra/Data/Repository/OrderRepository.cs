@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace PSE.Order.Infra.Data.Repository
         }
 
         public IUnityOfWork UnitOfWork => _context;
+        public DbConnection GetConnection() => _context.Database.GetDbConnection();
 
         public async Task<OrderCustomer> GetById(Guid id)
         {
