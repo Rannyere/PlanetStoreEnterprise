@@ -13,11 +13,9 @@ namespace PSE.WebApp.MVC.Services
     {
         private readonly HttpClient _httpClient;
 
-        public CatalogService(HttpClient httpClient,
-            IOptions<AppSettings> settings)
+        public CatalogService(HttpClient httpClient, IOptions<AppSettings> settings)
         {
             httpClient.BaseAddress = new Uri(settings.Value.CatalogUrl);
-
             _httpClient = httpClient;
         }
 

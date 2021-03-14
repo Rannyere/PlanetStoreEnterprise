@@ -47,5 +47,11 @@ namespace PSE.WebApp.MVC.Extensions
 
             return sb.ToString();
         }
+
+        public static string UnitsBtProductTotalValue(this RazorPage page, int units, decimal value)
+        {
+            return $"{units}x {FormatCurrency(page, value)} = Total: {FormatCurrency(page, value * units)}";
+        }
+
     }
 }

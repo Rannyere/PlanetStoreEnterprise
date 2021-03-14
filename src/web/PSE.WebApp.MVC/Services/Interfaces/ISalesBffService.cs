@@ -14,5 +14,8 @@ namespace PSE.WebApp.MVC.Services.Interfaces
         Task<ResponseErrorResult> UpdateProductCart(Guid productId, ItemCartViewModel itemCart);
         Task<ResponseErrorResult> RemoveProductCart(Guid productId);
         Task<ResponseErrorResult> ApplyVoucherCart(string voucher);
+
+        // Order
+        OrderTransactionViewModel MappingToOrder(CartCustomerViewModel cart, AddressViewModel address);
     }
 }

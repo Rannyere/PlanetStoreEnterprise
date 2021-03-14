@@ -9,7 +9,9 @@ using PSE.Core.Messages;
 
 namespace PSE.Clients.API.Application.Commands
 {
-    public class CustomerCommandHandler : CommandHandler, IRequestHandler<CustomerRegisterCommand, ValidationResult>
+    public class CustomerCommandHandler : CommandHandler,
+        IRequestHandler<CustomerRegisterCommand, ValidationResult>,
+        IRequestHandler<AddAddressCommand, ValidationResult>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -35,6 +37,16 @@ namespace PSE.Clients.API.Application.Commands
             _customerRepository.Add(customer);
 
             customer.AddEvent(new CustomerRegisteredEvent(message.Id, message.Name, message.Email, message.Cpf));
+
+            return await PersistToBase(_customerRepository.UnitOfWork);
+        }
+
+        public async Task<ValidationResult> Handle(AddAddressCommand message, CancellationToken cancellationToken)
+        {
+            if (!message.IsValid()) return message.ValidationResult;
+
+            var address = new Address(message.Street, message.Number, message.Complement, message.ZipCode, message.Neighborhood, message.City, message.State);
+            _customerRepository.AddAddress(address);
 
             return await PersistToBase(_customerRepository.UnitOfWork);
         }

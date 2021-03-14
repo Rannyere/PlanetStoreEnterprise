@@ -6,5 +6,6 @@ namespace PSE.WebApp.MVC.Extensions
         public string IdentificationUrl { get; set; }
         public string CatalogUrl { get; set; }
         public string SalesUrl { get; set; }
+        public string CustomerUrl { get; set; }
     }
 }

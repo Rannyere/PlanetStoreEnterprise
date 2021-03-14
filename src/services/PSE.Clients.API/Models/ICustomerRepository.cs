@@ -12,5 +12,9 @@ namespace PSE.Clients.API.Models
         Task<IEnumerable<Customer>> GetAll();
 
         Task<Customer> GetByCpf(string cpf);
+
+        Task<Address> GetAddressById(Guid id);
+
+        void AddAddress(Address address);
     }
 }

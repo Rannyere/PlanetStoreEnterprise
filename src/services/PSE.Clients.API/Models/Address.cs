@@ -24,7 +24,7 @@ namespace PSE.Clients.API.Models
         /* Entity Framework Relations */
         public Customer Customer { get; protected set; }
 
-        public Address(string street, string number, string complement, string zipCode, string neighborhood, string city, string state)
+        public Address(string street, string number, string complement, string zipCode, string neighborhood, string city, string state, Guid customerId)
         {
             Street = street;
             Number = number;
@@ -33,6 +33,7 @@ namespace PSE.Clients.API.Models
             Neighborhood = neighborhood;
             City = city;
             State = state;
+            CustomerId = customerId
         }
     }
 }

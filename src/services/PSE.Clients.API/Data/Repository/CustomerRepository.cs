@@ -37,5 +37,15 @@ namespace PSE.Clients.API.Data.Repository
         {
             _context?.Dispose();
         }
+
+        public async Task<Address> GetAddressById(Guid id)
+        {
+            return await _context.Addresses.FirstOrDefaultAsync(a => a.CustomerId == id);
+        }
+
+        public void AddAddress(Address address)
+        {
+            _context.Addresses.Add(address);
+        }
     }
 }

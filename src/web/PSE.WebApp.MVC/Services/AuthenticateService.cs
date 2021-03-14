@@ -15,11 +15,9 @@ namespace PSE.WebApp.MVC.Services
     {
         private readonly HttpClient _httpClient;
 
-        public AuthenticateService(HttpClient httpClient,
-                                   IOptions<AppSettings> settings)
+        public AuthenticateService(HttpClient httpClient, IOptions<AppSettings> settings)
         {
             httpClient.BaseAddress = new Uri(settings.Value.IdentificationUrl);
-
             _httpClient = httpClient;
         }
 

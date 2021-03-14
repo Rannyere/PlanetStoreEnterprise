@@ -19,6 +19,7 @@ namespace PSE.WebApp.MVC.Services
             _httpClient.BaseAddress = new Uri(settings.Value.SalesUrl);
         }
 
+        #region Cart
         public async Task<CartCustomerViewModel> GetCart()
         {
             var response = await _httpClient.GetAsync("/sales/cart");
@@ -79,5 +80,36 @@ namespace PSE.WebApp.MVC.Services
 
             return ReturnOk();
         }
+        #endregion
+
+        #region Order
+        public OrderTransactionViewModel MappingToOrder(CartCustomerViewModel cart, AddressViewModel address)
+        {
+            var order = new OrderTransactionViewModel
+            {
+                TotalValue = cart.TotalValue,
+                Items = cart.Items,
+                Discount = cart.Discount,
+                VoucherUsage = cart.VoucherUsage,
+                VoucherCode = cart.Voucher?.Code
+            };
+
+            if (address != null)
+            {
+                order.Address = new AddressViewModel
+                {
+                    Street = address.Street,
+                    Number = address.Number,
+                    Neighborhood = address.Neighborhood,
+                    ZipCode = address.ZipCode,
+                    Complement = address.Complement,
+                    City = address.City,
+                    State = address.State
+                };
+            }
+
+            return order;
+        }
+        #endregion
     }
 }
