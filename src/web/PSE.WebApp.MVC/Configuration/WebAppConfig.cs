@@ -32,6 +32,7 @@ namespace PSE.WebApp.MVC.Configuration
                 app.UseStatusCodePagesWithRedirects("/error/{0}");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

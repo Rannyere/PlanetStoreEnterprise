@@ -45,7 +45,7 @@ namespace PSE.Clients.API.Application.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var address = new Address(message.Street, message.Number, message.Complement, message.ZipCode, message.Neighborhood, message.City, message.State);
+            var address = new Address(message.Street, message.Number, message.Complement, message.ZipCode, message.Neighborhood, message.City, message.State, message.CustomerId);
             _customerRepository.AddAddress(address);
 
             return await PersistToBase(_customerRepository.UnitOfWork);

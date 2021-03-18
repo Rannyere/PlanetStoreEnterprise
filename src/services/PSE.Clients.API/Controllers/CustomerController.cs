@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSE.Clients.API.Application.Commands;
 using PSE.Clients.API.Models;
@@ -11,6 +10,7 @@ using PSE.WebAPI.Core.User;
 
 namespace PSE.Clients.API.Controllers
 {
+    [Authorize]
     public class CustomerController : MainController
     {
         private readonly IMediatorHandler _mediatorHandler;
@@ -37,7 +37,7 @@ namespace PSE.Clients.API.Controllers
         [HttpPost("customer/address")]
         public async Task<IActionResult> AddAddress(AddAddressCommand address)
         {
-            address.CustomerId == _user.GetUserId();
+            address.CustomerId = _user.GetUserId();
 
             return CustomResponse(await _mediatorHandler.SendCommand(address));
         }

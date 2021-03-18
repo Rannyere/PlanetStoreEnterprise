@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSE.WebApp.MVC.Models;
 using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Controllers
 {
-    public class CustomerContoller : MainController
+    public class CustomerController : MainController
     {
         private readonly ICustomerService _customerService;
 
-        public CustomerContoller(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
         }
@@ -25,7 +24,7 @@ namespace PSE.WebApp.MVC.Controllers
             if (HasErrorsInResponse(response)) TempData["Errors"] =
                 ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList();
 
-            return RedirectToAction("DeliveryAddress", "Order");
+            return RedirectToAction("AddressDelivery", "Order");
         }
     }
 }

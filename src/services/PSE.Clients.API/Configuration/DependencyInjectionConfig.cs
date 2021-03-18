@@ -18,9 +18,10 @@ namespace PSE.Clients.API.Configuration
         public static void RegisterServices(this IServiceCollection services)
         {
             // Application
-            services.AddScoped<IMediatorHandler, MediatorHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAspNetUser, AspNetUser>();
+
+            services.AddScoped<IMediatorHandler, MediatorHandler>();
 
             // Command
             services.AddScoped<IRequestHandler<CustomerRegisterCommand, ValidationResult>, CustomerCommandHandler>();

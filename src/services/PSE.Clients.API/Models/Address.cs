@@ -33,7 +33,7 @@ namespace PSE.Clients.API.Models
             Neighborhood = neighborhood;
             City = city;
             State = state;
-            CustomerId = customerId
+            CustomerId = customerId;
         }
     }
 }

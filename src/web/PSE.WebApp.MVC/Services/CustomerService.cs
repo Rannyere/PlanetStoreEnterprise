@@ -16,8 +16,8 @@ namespace PSE.WebApp.MVC.Services
 
         public CustomerService(HttpClient httpClient, IOptions<AppSettings> settings)
         {
-            httpClient.BaseAddress = new Uri(settings.Value.CatalogUrl);
             _httpClient = httpClient;
+            httpClient.BaseAddress = new Uri(settings.Value.CustomerUrl);
         }
 
         public async Task<AddressViewModel> GetAddress()

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSE.WebApp.MVC.Services.Interfaces;
 
 namespace PSE.WebApp.MVC.Controllers
 {
+    [Authorize]
     public class OrderController : MainController
     {
         private readonly ICustomerService _customerService;
@@ -19,7 +21,7 @@ namespace PSE.WebApp.MVC.Controllers
 
         [HttpGet]
         [Route("delivery-address")]
-        public async Task<IActionResult> EnderecoEntrega()
+        public async Task<IActionResult> AddressDelivery()
         {
             var cart = await _salesBffService.GetCart();
             if (cart.Items.Count == 0) return RedirectToAction("Index", "Cart");
