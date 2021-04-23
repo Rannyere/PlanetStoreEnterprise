@@ -53,5 +53,37 @@ namespace PSE.WebApp.MVC.Extensions
             return $"{units}x {FormatCurrency(page, value)} = Total: {FormatCurrency(page, value * units)}";
         }
 
+        public static string DisplayStatus(this RazorPage page, int status)
+        {
+            var statusMessage = "";
+            var statusClasse = "";
+
+            switch (status)
+            {
+                case 1:
+                    statusClasse = "info";
+                    statusMessage = "In approval";
+                    break;
+                case 2:
+                    statusClasse = "primary";
+                    statusMessage = "Approved";
+                    break;
+                case 3:
+                    statusClasse = "danger";
+                    statusMessage = "Declined";
+                    break;
+                case 4:
+                    statusClasse = "success";
+                    statusMessage = "Delivered";
+                    break;
+                case 5:
+                    statusClasse = "warning";
+                    statusMessage = "Canceled";
+                    break;
+
+            }
+
+            return $"<span class='badge badge-{statusClasse}'>{statusMessage}</span>";
+        }
     }
 }

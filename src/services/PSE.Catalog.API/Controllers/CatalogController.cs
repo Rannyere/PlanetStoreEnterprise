@@ -33,5 +33,11 @@ namespace PSE.Catalog.API.Controllers
         {
             return await _productRepository.GetById(id);
         }
+
+        [HttpGet("catalog/products/list/{ids}")]
+        public async Task<IEnumerable<Product>> GetProductsById(string ids)
+        {
+            return await _productRepository.GetPoductsById(ids);
+        }
     }
 }

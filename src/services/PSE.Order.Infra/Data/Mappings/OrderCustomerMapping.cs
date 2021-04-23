@@ -22,8 +22,8 @@ namespace PSE.Order.Infra.Data.Mappings
                 a.Property(oa => oa.Complement)
                     .HasColumnName("Complement");
 
-                a.Property(oa => oa.Neighborhoodty)
-                    .HasColumnName("Neighborhoodty");
+                a.Property(oa => oa.Neighborhood)
+                    .HasColumnName("Neighborhood");
 
                 a.Property(oa => oa.ZipCode)
                     .HasColumnName("ZipCode");
@@ -37,8 +37,7 @@ namespace PSE.Order.Infra.Data.Mappings
 
             builder.Property(c => c.Code)
                 .HasColumnName("Code")
-                .HasColumnType("int unsigned");
-                //.HasDefaultValueSql("NEXT VALUE FOR MySequence");
+                .HasColumnType("int unsigned not null auto_increment");
 
             // 1 : N => OrderCustomer : OrderItems
             builder.HasMany(c => c.OrderItems)

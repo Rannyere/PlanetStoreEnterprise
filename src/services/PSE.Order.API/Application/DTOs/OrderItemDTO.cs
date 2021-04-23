@@ -7,15 +7,15 @@ namespace PSE.Order.API.Application.DTOs
     {
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
-        public string ProductName { get; set; }
+        public string Name { get; set; }
         public int Quantity { get; set; }
-        public decimal ValueUnit { get; set; }
-        public string ProductImage { get; set; }
+        public decimal Value { get; set; }
+        public string Image { get; set; }
 
         public static OrderItem ToOrderItem(OrderItemDTO orderItemDTO)
         {
-            return new OrderItem(orderItemDTO.ProductId, orderItemDTO.ProductName, orderItemDTO.Quantity,
-                orderItemDTO.ValueUnit, orderItemDTO.ProductImage);
+            return new OrderItem(orderItemDTO.ProductId, orderItemDTO.Name, orderItemDTO.Quantity,
+                orderItemDTO.Value, orderItemDTO.Image);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace PSE.Order.API.Application.Commands
                 Street = message.Address.Street,
                 Number = message.Address.Number,
                 Complement = message.Address.Complement,
-                Neighborhoodty = message.Address.Neighborhoodty,
+                Neighborhood = message.Address.Neighborhood,
                 ZipCode = message.Address.ZipCode,
                 City = message.Address.City,
                 State = message.Address.State

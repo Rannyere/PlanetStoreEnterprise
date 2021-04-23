@@ -7,21 +7,21 @@ namespace PSE.Order.Domain.Orders
     {
         public Guid OrderId { get; private set; }
         public Guid ProductId { get; private set; }
-        public string ProductName { get; private set; }
+        public string Name { get; private set; }
         public int Quantity { get; private set; }
-        public decimal ValueUnit { get; private set; }
-        public string ProductImage { get; set; }
+        public decimal Value { get; private set; }
+        public string Image { get; set; }
 
         // EF Rel.
         public OrderCustomer OrderCustomer { get; set; }
 
-        public OrderItem(Guid productId, string productName, int quantity, decimal valueUnit, string productImage)
+        public OrderItem(Guid productId, string name, int quantity, decimal value, string image)
         {
             ProductId = productId;
-            ProductName = productName;
+            Name = name;
             Quantity = quantity;
-            ValueUnit = valueUnit;
-            ProductImage = productImage;
+            Value = value;
+            Image = image;
         }
 
         // EF ctor
@@ -29,7 +29,7 @@ namespace PSE.Order.Domain.Orders
 
         internal decimal CalculateValue()
         {
-            return Quantity * ValueUnit;
+            return Quantity * Value;
         }
     }
 }

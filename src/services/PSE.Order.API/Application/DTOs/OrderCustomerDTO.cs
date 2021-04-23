@@ -36,11 +36,11 @@ namespace PSE.Order.API.Application.DTOs
             {
                 orderCustomerDTO.OrderItems.Add(new OrderItemDTO
                 {
-                    ProductName = item.ProductName,
-                    ProductImage = item.ProductImage,
+                    Name = item.Name,
+                    Image = item.Image,
                     Quantity = item.Quantity,
                     ProductId = item.ProductId,
-                    ValueUnit = item.ValueUnit,
+                    Value = item.Value,
                     OrderId = item.OrderId
                 });
             }
@@ -50,7 +50,7 @@ namespace PSE.Order.API.Application.DTOs
                 Street = orderCustomer.Address.Street,
                 Number = orderCustomer.Address.Number,
                 Complement = orderCustomer.Address.Complement,
-                Neighborhoodty = orderCustomer.Address.Neighborhoodty,
+                Neighborhood = orderCustomer.Address.Neighborhood,
                 ZipCode = orderCustomer.Address.ZipCode,
                 City = orderCustomer.Address.City,
                 State = orderCustomer.Address.State,

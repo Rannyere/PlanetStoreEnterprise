@@ -11,6 +11,8 @@ namespace PSE.Catalog.API.Models
 
         Task<Product> GetById(Guid idProduct);
 
+        Task<List<Product>> GetPoductsById(string ids);
+
         void Add(Product product);
 
         void Update(Product product);

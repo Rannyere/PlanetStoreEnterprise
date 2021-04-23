@@ -27,12 +27,12 @@ namespace PSE.Order.API.Application.Queries
         {
             const string sql = @"SELECT
                                 O.ID AS 'ProductId', O.CODE, O.VOUCHERUSAGE, O.DISCOUNT, O.TOTALVALUE, O.ORDERSTATUS,
-                                O.STREET, O.NUMBER, O.NEIGHBORHOODTY, O.ZIPCODE, O.COMPLEMENT, O.CITY, O.STATE,
-                                OIT.ID AS 'ProductItemId',OIT.PRODUCTNAME, OIT.QUANTITY, OIT.PRODUCTIMAGE, OIT.VALUEUNIT 
+                                O.STREET, O.NUMBER, O.NEIGHBORHOOD, O.ZIPCODE, O.COMPLEMENT, O.CITY, O.STATE,
+                                OIT.ID AS 'ProductItemId',OIT.NAME, OIT.QUANTITY, OIT.IMAGE, OIT.VALUE 
                                 FROM ORDERS O 
                                 INNER JOIN ORDERITEMS OIT ON O.ID = OIT.ORDERID 
                                 WHERE O.CUSTOMERID = @customerId 
-                                AND O.DATEREGISTER >= DATE_SUB(NOW(),INTERVAL 5 MINUTE)
+                                AND O.DATEREGISTER >= DATE_SUB(NOW(),INTERVAL 1 MINUTE)
                                 AND O.ORDERSTATUS = 1 
                                 ORDER BY O.DATEREGISTER DESC";
 
@@ -53,17 +53,17 @@ namespace PSE.Order.API.Application.Queries
         {
             var order = new OrderCustomerDTO
             {
-                Code = result[0].CODE,
-                OrderStatus = result[0].ORDERSTATUS,
-                TotalValue = result[0].TOTALVALUE,
-                Discount = result[0].DISCOUNT,
-                VoucherUsage = result[0].VOUCHERUSAGE,
+                Code = Convert.ToInt32(result[0].CODE),
+                OrderStatus = Convert.ToInt32(result[0].ORDERSTATUS),
+                TotalValue = Convert.ToDecimal(result[0].TOTALVALUE),
+                Discount = Convert.ToDecimal(result[0].DISCOUNT),
+                VoucherUsage = Convert.ToBoolean(result[0].VOUCHERUSAGE),
 
                 OrderItems = new List<OrderItemDTO>(),
                 Address = new AddressDTO
                 {
                     Street = result[0].STREET,
-                    Neighborhoodty = result[0].NEIGHBORHOODTY,
+                    Neighborhood = result[0].NEIGHBORHOOD,
                     ZipCode = result[0].ZIPCODE,
                     City = result[0].CITY,
                     Complement = result[0].COMPLEMENT,
@@ -76,10 +76,10 @@ namespace PSE.Order.API.Application.Queries
             {
                 var orderItem = new OrderItemDTO
                 {
-                    ProductName = item.PRODUCTNAME,
-                    ValueUnit = item.VALUEUNIT,
+                    Name = item.NAME,
+                    Value = item.VALUE,
                     Quantity = item.QUANTITY,
-                    ProductImage = item.PRODUCTIMAGE
+                    Image = item.IMAGE
                 };
 
                 order.OrderItems.Add(orderItem);

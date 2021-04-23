@@ -11,7 +11,7 @@ namespace PSE.Order.API.Application.DTOs
 
         public string ZipCode { get; set; }
 
-        public string Neighborhoodty { get; set; }
+        public string Neighborhood { get; set; }
 
         public string City { get; set; }
 

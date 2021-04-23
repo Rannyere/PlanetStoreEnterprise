@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using PSE.Core.Responses;
 using PSE.WebApp.MVC.Models;
@@ -15,7 +16,10 @@ namespace PSE.WebApp.MVC.Services.Interfaces
         Task<ResponseErrorResult> RemoveProductCart(Guid productId);
         Task<ResponseErrorResult> ApplyVoucherCart(string voucher);
 
-        // Order
+        // ORDER
+        Task<ResponseErrorResult> Checkout(OrderTransactionViewModel orderTransaction);
+        Task<OrderCustomerViewModel> GetLastOrder();
+        Task<IEnumerable<OrderCustomerViewModel>> GetListOrdersByCustomerId();
         OrderTransactionViewModel MappingToOrder(CartCustomerViewModel cart, AddressViewModel address);
     }
 }

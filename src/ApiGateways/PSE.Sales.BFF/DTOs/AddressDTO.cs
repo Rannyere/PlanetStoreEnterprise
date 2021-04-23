@@ -1,21 +1,14 @@
 ﻿using System;
-
-namespace PSE.Order.Domain.Orders
+namespace PSE.Sales.BFF.DTOs
 {
-    public class Address
+    public class AddressDTO
     {
         public string Street { get; set; }
-
         public string Number { get; set; }
-
         public string Complement { get; set; }
-
         public string ZipCode { get; set; }
-
         public string Neighborhood { get; set; }
-
         public string City { get; set; }
-
         public string State { get; set; }
     }
 }

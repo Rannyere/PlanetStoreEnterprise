@@ -11,7 +11,7 @@ namespace PSE.Order.Infra.Data.Mappings
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.ProductName)
+            builder.Property(c => c.Name)
                 .IsRequired()
                 .HasColumnType("varchar(250)");
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -83,6 +84,36 @@ namespace PSE.WebApp.MVC.Services
         #endregion
 
         #region Order
+
+        public async Task<ResponseErrorResult> Checkout(OrderTransactionViewModel orderTransaction)
+        {
+            var orderContent = GetContent(orderTransaction);
+
+            var response = await _httpClient.PostAsync("/sales/order/", orderContent);
+
+            if (!CheckErrorsResponse(response)) return await DeserializeObjectResponse<ResponseErrorResult>(response);
+
+            return ReturnOk();
+        }
+
+        public async Task<OrderCustomerViewModel> GetLastOrder()
+        {
+            var response = await _httpClient.GetAsync("/sales/order/last");
+
+            CheckErrorsResponse(response);
+
+            return await DeserializeObjectResponse<OrderCustomerViewModel>(response);
+        }
+
+        public async Task<IEnumerable<OrderCustomerViewModel>> GetListOrdersByCustomerId()
+        {
+            var response = await _httpClient.GetAsync("/sales/order/list");
+
+            CheckErrorsResponse(response);
+
+            return await DeserializeObjectResponse<IEnumerable<OrderCustomerViewModel>>(response);
+        }
+
         public OrderTransactionViewModel MappingToOrder(CartCustomerViewModel cart, AddressViewModel address)
         {
             var order = new OrderTransactionViewModel
