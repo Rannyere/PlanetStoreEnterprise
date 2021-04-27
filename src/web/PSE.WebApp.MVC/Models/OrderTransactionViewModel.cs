@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PSE.Core.Validation;
 
 namespace PSE.WebApp.MVC.Models
 {
@@ -35,6 +36,7 @@ namespace PSE.WebApp.MVC.Models
         public string CardHolder { get; set; }
 
         [RegularExpression(@"(0[1-9]|1[0-2])\/[0-9]{2}", ErrorMessage = "The expiration of the card must be in the MM/AA format")]
+        [CardExpiration(ErrorMessage = "Expired Card")]
         [Required(ErrorMessage = "Enter the expiration")]
         [DisplayName("Due date MM/AA")]
         public string CardExpiration { get; set; }

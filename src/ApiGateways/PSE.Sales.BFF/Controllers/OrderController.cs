@@ -88,15 +88,15 @@ namespace PSE.Sales.BFF.Controllers
                 if (productCatalog.Value != itemCart.Value)
                 {
                     var msgErro = $"The product {itemCart.Name} has changed its value (from:" +
-                                  $"{string.Format (CultureInfo.GetCultureInfo (" en - US ")," { 0: C}", itemCart.Value)} to:" +
-                                  $"{string.Format (CultureInfo.GetCultureInfo (" en - US ")," { 0: C}", productCatalog.Value)}) since it was added to the cart.";
+                                  $"{string.Format (CultureInfo.GetCultureInfo ("en-US"), "{0:C}", itemCart.Value)} to: " +
+                                  $"{string.Format (CultureInfo.GetCultureInfo ("en-US"), "{0:C}", productCatalog.Value)}) since it was added to the cart.";
 
                     AddErrorInProcess(msgErro);
 
                     var responseRemover = await _cartService.RemoveProductCart(itemCart.ProductId);
                     if (ResponseHasErrors(responseRemover))
                     {
-                        AddErrorInProcess($"It was not possible to automatically remove the product {itemCart.Name} from your cart, _" +"remove and add again if you still want to buy this item");
+                        AddErrorInProcess($"It was not possible to automatically remove the product {itemCart.Name} from your cart, _" + " remove and add again if you still want to buy this item");
                         return false;
                     }
 
@@ -110,7 +110,7 @@ namespace PSE.Sales.BFF.Controllers
                     }
 
                     ClearErrorsProcess();
-                    AddErrorInProcess(msgErro + "We updated the value in your cart, check the order and if you prefer, remove the product");
+                    AddErrorInProcess(msgErro + " We updated the value in your cart, check the order and if you prefer, remove the product");
                     return false;
                 }
             }
