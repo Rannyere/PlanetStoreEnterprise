@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using MediatR;
 using PSE.Core.Messages;
+using PSE.Core.Messages.Integration;
+using PSE.MessageBus;
 using PSE.Order.API.Application.DTOs;
 using PSE.Order.API.Application.Events;
 using PSE.Order.Domain.Orders;
@@ -18,11 +20,15 @@ namespace PSE.Order.API.Application.Commands
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IVoucherRepository _voucherRepository;
+        private readonly IMessageBus _bus;
 
-        public OrderCommandHandler(IOrderRepository orderRepository, IVoucherRepository voucherRepository)
+        public OrderCommandHandler(IOrderRepository orderRepository,
+                                   IVoucherRepository voucherRepository,
+                                   IMessageBus bus)
         {
             _orderRepository = orderRepository;
             _voucherRepository = voucherRepository;
+            _bus = bus;
         }
 
         public async Task<ValidationResult> Handle(ExecuteOrderCommand message, CancellationToken cancellationToken)
@@ -36,7 +42,7 @@ namespace PSE.Order.API.Application.Commands
             if (!ValidateOrder(order)) return ValidationResult;
 
             // Mockup
-            if (!ProcessPayment(order)) return ValidationResult;
+            if (!await ProcessPayment(order, message)) return ValidationResult;
 
             order.AuthorizeOrder();
 
@@ -116,9 +122,31 @@ namespace PSE.Order.API.Application.Commands
             return true;
         }
 
-        public bool ProcessPayment(OrderCustomer order)
+        public async Task<bool> ProcessPayment(OrderCustomer order, ExecuteOrderCommand message)
         {
-            return true;
+            var orderStarted = new OrderStartedIntegrationEvent
+            {
+                OrderId = order.Id,
+                CustomerId = order.CustomerId,
+                TotalValue = order.TotalValue,
+                PaymentMethod = 1, // fixed. Change if you have more types
+                CardHolder = message.CardHolder,
+                CardNumber = message.CardNumber,
+                CardExpiration = message.CardExpiration,
+                CardCvv = message.CardCvv
+            };
+
+            var result = await _bus
+                .RequestAsync<OrderStartedIntegrationEvent, ResponseMessage>(orderStarted);
+
+            if (result.ValidationResult.IsValid) return true;
+
+            foreach (var error in result.ValidationResult.Errors)
+            {
+                AddErrors(error.ErrorMessage);
+            }
+
+            return false;
         }
     }
 }
