@@ -5,7 +5,7 @@
     <UserSecretsId>9ffcd156-f13b-4b26-bfee-6e9f856f9376</UserSecretsId>
   </PropertyGroup>
   
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SefHosting' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.10" />

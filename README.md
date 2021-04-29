@@ -56,6 +56,11 @@ GENERATE DATABASE
     *  dotnet ef migrations add Voucher --project PSE.Order.Infra -s PSE.Order.API --context OrderDbContext --verbose
     *  dotnet ef database update Voucher --project PSE.Order.Infra -s PSE.Order.API --context OrderDbContext --verbose
 
+* Migration PSE.Payment.API
+  * PaymentDbContext:
+    *  dotnet ef migrations add PaymentsInfo --project PSE.Payment.API -s PSE.Payment.API --context PaymentDbContext --verbose
+    *  dotnet ef database update PaymentsInfo --project PSE.Payment.API -s PSE.Payment.API --context PaymentDbContext --verbose
+
 
 MAINTAINERS
 -----------

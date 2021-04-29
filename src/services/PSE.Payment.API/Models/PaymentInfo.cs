@@ -4,7 +4,7 @@ using PSE.Core.DomainObjects;
 
 namespace PSE.Payment.API.Models
 {
-    public class Payment : Entity, IAggregatedRoot
+    public class PaymentInfo : Entity, IAggregatedRoot
     {
         public Guid OrderId { get; set; }
         public PaymentMehtod PaymentMehtod { get; set; }
@@ -15,7 +15,7 @@ namespace PSE.Payment.API.Models
         // EF Relation
         public ICollection<Transaction> Transactions { get; set; }
 
-        public Payment()
+        public PaymentInfo()
         {
             Transactions = new List<Transaction>();
         }

@@ -15,6 +15,6 @@ namespace PSE.Payment.API.Models
         public Guid PaymentId { get; set; }
 
         // EF Relation
-        public Payment Payment { get; set; }
+        public PaymentInfo Payment { get; set; }
     }
 }
