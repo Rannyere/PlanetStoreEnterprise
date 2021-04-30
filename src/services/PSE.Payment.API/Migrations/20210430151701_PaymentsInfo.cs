@@ -25,7 +25,7 @@ namespace PSE.Payment.API.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    PaymentId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     AuthorizationCode = table.Column<string>(type: "varchar(100)", nullable: true),
                     FlagCard = table.Column<string>(type: "varchar(100)", nullable: true),
                     DateTransaction = table.Column<DateTime>(nullable: true),
@@ -33,11 +33,12 @@ namespace PSE.Payment.API.Migrations
                     CostTransaction = table.Column<decimal>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     TID = table.Column<string>(type: "varchar(100)", nullable: true),
-                    NSU = table.Column<string>(type: "varchar(100)", nullable: true)
+                    NSU = table.Column<string>(type: "varchar(100)", nullable: true),
+                    PaymentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.PaymentId);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Transactions_Payments_PaymentId",
                         column: x => x.PaymentId,
@@ -45,6 +46,11 @@ namespace PSE.Payment.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_PaymentId",
+                table: "Transactions",
+                column: "PaymentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

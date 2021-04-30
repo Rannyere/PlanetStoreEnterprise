@@ -39,7 +39,8 @@ namespace PSE.Payment.API.Migrations
 
             modelBuilder.Entity("PSE.Payment.API.Models.Transaction", b =>
                 {
-                    b.Property<Guid>("PaymentId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AuthorizationCode")
@@ -57,6 +58,9 @@ namespace PSE.Payment.API.Migrations
                     b.Property<string>("NSU")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -66,7 +70,9 @@ namespace PSE.Payment.API.Migrations
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("decimal(65,30)");
 
-                    b.HasKey("PaymentId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
 
                     b.ToTable("Transactions");
                 });

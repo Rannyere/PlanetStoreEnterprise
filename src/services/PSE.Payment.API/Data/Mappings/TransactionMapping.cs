@@ -9,7 +9,7 @@ namespace PSE.Payment.API.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Transaction> builder)
         {
-            builder.HasKey(c => c.PaymentId);
+            builder.HasKey(c => c.Id);
 
             // 1 : N => PaymentInfo : Transaction
             builder.HasOne(c => c.Payment)

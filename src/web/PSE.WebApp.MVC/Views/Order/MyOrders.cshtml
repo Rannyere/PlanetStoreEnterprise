@@ -2,14 +2,14 @@
 @model IEnumerable<PSE.WebApp.MVC.Models.OrderCustomerViewModel>
 
 @{
-    ViewData["Title"] = "Meus Pedidos";
+    ViewData["Title"] = "My Orders";
 }
 
 <section class="padding-y">
     <div class="container">
 
         @{
-            foreach (var order in Model.OrderBy(p => p.DateRegister))
+            foreach (var order in Model.OrderByDescending(p => p.Code))
             {
                 <div class="col-md-12" style="padding-bottom: 35px">
                     <article class="card">

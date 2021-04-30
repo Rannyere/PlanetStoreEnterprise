@@ -35,7 +35,7 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
-    "Selfhosting": {
+    "SelfHosting": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

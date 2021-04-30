@@ -5,7 +5,7 @@
     <UserSecretsId>b1323e3c-eded-4477-87dc-9def4422de79</UserSecretsId>
   </PropertyGroup>
   
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Selfhosting' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />

@@ -1,7 +1,9 @@
 ﻿using System;
+using PSE.Core.DomainObjects;
+
 namespace PSE.Payment.API.Models
 {
-    public class Transaction
+    public class Transaction : Entity
     {
         public string AuthorizationCode { get; set; }
         public string FlagCard { get; set; }
