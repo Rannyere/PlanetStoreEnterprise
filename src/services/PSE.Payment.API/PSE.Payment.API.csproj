@@ -25,6 +25,7 @@
     <Folder Include="Data\Repository\" />
     <Folder Include="Data\Mappings\" />
     <Folder Include="Facade\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
