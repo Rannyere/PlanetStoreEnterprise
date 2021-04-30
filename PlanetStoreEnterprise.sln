@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSE.Order.Domain", "src\ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSE.Order.Infra", "src\services\PSE.Order.Infra\PSE.Order.Infra.csproj", "{A1963679-7461-4183-AB72-06299E6F372D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSE.Payment.Gateway", "src\services\PSE.Payment.Gateway\PSE.Payment.Gateway.csproj", "{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{A1963679-7461-4183-AB72-06299E6F372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1963679-7461-4183-AB72-06299E6F372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1963679-7461-4183-AB72-06299E6F372D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,5 +160,6 @@ Global
 		{6E73048C-BBF1-4DB0-99ED-E0123D4EA50A} = {66224FA4-08B1-47E4-9E1D-979347A94B15}
 		{2C4DE217-688F-4EF5-979B-568B456A3E29} = {5A503DDE-B88C-4AA1-A08B-0C2EB63616B2}
 		{A1963679-7461-4183-AB72-06299E6F372D} = {5A503DDE-B88C-4AA1-A08B-0C2EB63616B2}
+		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74} = {60CAD240-1572-4481-B575-E3F1F2A29932}
 	EndGlobalSection
 EndGlobal

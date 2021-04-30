@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSE.Payment.API.Data;
+using PSE.Payment.API.Facade;
 using PSE.WebAPI.Core.Identification;
 
 namespace PSE.Payment.API.Configuration
@@ -18,6 +19,8 @@ namespace PSE.Payment.API.Configuration
                 options.UseMySql(configuration.GetConnectionString(name: "DefaultConnection")));
 
             services.AddControllers();
+
+            services.Configure<PaymentConfig>(configuration.GetSection("PaymentConfig"));
 
             services.AddCors(options =>
             {

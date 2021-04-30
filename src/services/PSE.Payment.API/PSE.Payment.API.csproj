@@ -24,6 +24,7 @@
     <Folder Include="Controllers\" />
     <Folder Include="Data\Repository\" />
     <Folder Include="Data\Mappings\" />
+    <Folder Include="Facade\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
@@ -33,6 +34,9 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\buildingBlocks\PSE.MessageBus\PSE.MessageBus.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\PSE.Payment.Gateway\PSE.Payment.Gateway.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
