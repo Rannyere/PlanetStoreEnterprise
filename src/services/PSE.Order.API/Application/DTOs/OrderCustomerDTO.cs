@@ -8,12 +8,16 @@ namespace PSE.Order.API.Application.DTOs
     {
         public Guid Id { get; set; }
         public int Code { get; set; }
+
+        public Guid CustomerId { get; set; }
         public int OrderStatus { get; set; }
         public DateTime DateRegister { get; set; }
         public decimal TotalValue { get; set; }
+
         public string VoucherCode { get; set; }
         public bool VoucherUsage { get; set; }
         public decimal Discount { get; set; }
+
         public List<OrderItemDTO> OrderItems { get; set; }
         public AddressDTO Address { get; set; }
 

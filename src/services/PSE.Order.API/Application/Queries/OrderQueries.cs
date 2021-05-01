@@ -12,6 +12,7 @@ namespace PSE.Order.API.Application.Queries
     {
         Task<OrderCustomerDTO> GetLastOrder(Guid customerId);
         Task<IEnumerable<OrderCustomerDTO>> GetListOrdersByCustomer(Guid customerId);
+        Task<OrderCustomerDTO> GetOrdersAuthorized();
     }
 
     public class OrderQueries : IOrderQueries
@@ -47,6 +48,36 @@ namespace PSE.Order.API.Application.Queries
             var orders = await _orderRepository.GetListOrdersByCustomer(customerId);
 
             return orders.Select(OrderCustomerDTO.ToOrderCustomerDTO);
+        }
+
+        public async Task<OrderCustomerDTO> GetOrdersAuthorized()
+        {
+            const string sql = @"SELECT 
+                                O.ID as 'OrderId', O.ID, O.CUSTOMERID, 
+                                OI.ID as 'OrderItemId', OI.ID, OI.PRODUCTID, OI.QUANTITY 
+                                FROM ORDERS O 
+                                INNER JOIN ORDERITEMS OI ON O.ID = PI.ORDERID 
+                                WHERE O.ORDERSTATUS = 1                                
+                                ORDER BY O.DATEREGISTER";
+
+            // Use of the lookup to maintain the status for each record cycle returned
+            var lookup = new Dictionary<Guid, OrderCustomerDTO>();
+
+            await _orderRepository.GetConnection().QueryAsync<OrderCustomerDTO, OrderItemDTO, OrderCustomerDTO>(sql,
+                (o, oi) =>
+                {
+                    if (!lookup.TryGetValue(o.Id, out var orderCustomerDTO))
+                        lookup.Add(o.Id, orderCustomerDTO = o);
+
+                    orderCustomerDTO.OrderItems ??= new List<OrderItemDTO>();
+                    orderCustomerDTO.OrderItems.Add(oi);
+
+                    return orderCustomerDTO;
+
+                }, splitOn: "OrderId,OrderItemId");
+
+            // Getting data from the lookup
+            return lookup.Values.OrderBy(p => p.DateRegister).FirstOrDefault();
         }
 
         private OrderCustomerDTO MappingOrder(dynamic result)
