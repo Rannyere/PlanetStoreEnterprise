@@ -12,5 +12,16 @@ namespace PSE.Catalog.API.Models
         public DateTime DateRegister { get; set; }
         public string Image { get; set; }
         public int QuantityStock { get; set; }
+
+        public void RemoveStock(int quantity)
+        {
+            if (QuantityStock >= quantity)
+                QuantityStock -= quantity;
+        }
+
+        public bool IsAvailable(int quantity)
+        {
+            return Activ && QuantityStock >= quantity;
+        }
     }
 }
