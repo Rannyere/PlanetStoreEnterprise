@@ -44,6 +44,16 @@ namespace PSE.Order.Domain.Orders
             OrderStatus = OrderStatus.Authorized;
         }
 
+        public void CancelOrder()
+        {
+            OrderStatus = OrderStatus.Canceled;
+        }
+
+        public void FinalizeOrder()
+        {
+            OrderStatus = OrderStatus.Paid;
+        }
+
         public void AssociateVoucher(Voucher voucher)
         {
             VoucherUsage = true;

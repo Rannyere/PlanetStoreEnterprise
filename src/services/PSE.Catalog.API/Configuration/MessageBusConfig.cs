@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PSE.Catalog.API.Services;
 using PSE.Core.Utils;
+using PSE.MessageBus;
 
 namespace PSE.Catalog.API.Configuration
 {
-    public class MessageBusConfig
+    public static class MessageBusConfig
     {
         public static void AddMessageBusConfiguration(this IServiceCollection services,
                                                            IConfiguration configuration)

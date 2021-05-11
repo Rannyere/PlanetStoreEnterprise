@@ -29,7 +29,7 @@ namespace PSE.Payment.API.Facade
             };
             var cardHash = cardHashGen.Generate();
 
-            var transaction = new DealTransaction(planetPaySvc)
+            var dealTransaction = new DealTransaction(planetPaySvc)
             {
                 CardHash = cardHash,
                 CardNumber = payment.CreditCard.CardNumber,
@@ -40,10 +40,30 @@ namespace PSE.Payment.API.Facade
                 Amount = payment.TotalValue
             };
 
-            return ConvertDealTransactionToTransaction(await transaction.AuthorizeCardTransaction());
+            return ConvertToTransaction(await dealTransaction.AuthorizeCardTransaction());
         }
 
-        public static Transaction ConvertDealTransactionToTransaction(DealTransaction dealTransaction)
+        public async Task<Transaction> CapturePayment(Transaction transaction)
+        {
+            var planetPaySvc = new PlanetPayService(_paymentConfig.DefaultApiKey,
+                _paymentConfig.DefaultEncryptionKey);
+
+            var dealTransaction = ConvertToDealTransaction(transaction, planetPaySvc);
+
+            return ConvertToTransaction(await dealTransaction.CaptureCardTransaction());
+        }
+
+        public async Task<Transaction> CancelPayment(Transaction transaction)
+        {
+            var planetPaySvc = new PlanetPayService(_paymentConfig.DefaultApiKey,
+                _paymentConfig.DefaultEncryptionKey);
+
+            var dealTransaction = ConvertToDealTransaction(transaction, planetPaySvc);
+
+            return ConvertToTransaction(await dealTransaction.CancelAuthorization());
+        }
+
+        public static Transaction ConvertToTransaction(DealTransaction dealTransaction)
         {
             return new Transaction
             {
@@ -56,6 +76,20 @@ namespace PSE.Payment.API.Facade
                 DateTransaction = dealTransaction.TransactionDate,
                 NSU = dealTransaction.Nsu,
                 TID = dealTransaction.Tid
+            };
+        }
+
+        public static DealTransaction ConvertToDealTransaction(Transaction transaction, PlanetPayService planetPayService)
+        {
+            return new DealTransaction(planetPayService)
+            {
+                Status = (TransactionStatus)transaction.Status,
+                Amount = transaction.TotalValue,
+                CardBrand = transaction.FlagCard,
+                AuthorizationCode = transaction.AuthorizationCode,
+                Cost = transaction.CostTransaction,
+                Nsu = transaction.NSU,
+                Tid = transaction.TID
             };
         }
     }

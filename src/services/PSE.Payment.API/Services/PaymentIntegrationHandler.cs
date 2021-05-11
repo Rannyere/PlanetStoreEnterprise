@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PSE.Core.DomainObjects;
 using PSE.Core.Messages.Integration;
 using PSE.MessageBus;
 using PSE.Payment.API.Models;
@@ -26,9 +27,19 @@ namespace PSE.Payment.API.Services
                 await AuthorizePayment(request));
         }
 
+        private void SetSubscribers()
+        {
+            _bus.SubscribeAsync<OrderCanceledIntegrationEvent>("OrderCanceled", async request =>
+            await CancelPayment(request));
+
+            _bus.SubscribeAsync<OrderWritedOffStockIntegrationEvent>("OrderWriteOff", async request =>
+            await CapturePayment(request));
+        }
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             SetResponder();
+            SetSubscribers();
             return Task.CompletedTask;
         }
 
@@ -49,5 +60,35 @@ namespace PSE.Payment.API.Services
 
             return response;
         }
+
+        private async Task CapturePayment(OrderWritedOffStockIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentService>();
+
+                var response = await paymentService.CapturePayment(message.OrderId);
+
+                if (!response.ValidationResult.IsValid)
+                    throw new DomainException($"Failed to capture order payment {message.OrderId}");
+
+                await _bus.PublishAsync(new OrderPaidIntegrationEvent(message.CustomerId, message.OrderId));
+            }
+        }
+
+        private async Task CancelPayment(OrderCanceledIntegrationEvent message)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentService>();
+
+                var response = await paymentService.CancelPayment(message.OrderId);
+
+                if (!response.ValidationResult.IsValid)
+                    throw new DomainException($"Failed to cancel order payment {message.OrderId}");
+            }
+        }
+
+        
     }
 }

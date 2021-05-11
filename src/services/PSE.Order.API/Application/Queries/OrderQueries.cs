@@ -56,7 +56,7 @@ namespace PSE.Order.API.Application.Queries
                                 O.ID as 'OrderId', O.ID, O.CUSTOMERID, 
                                 OI.ID as 'OrderItemId', OI.ID, OI.PRODUCTID, OI.QUANTITY 
                                 FROM ORDERS O 
-                                INNER JOIN ORDERITEMS OI ON O.ID = PI.ORDERID 
+                                INNER JOIN ORDERITEMS OI ON O.ID = OI.ORDERID 
                                 WHERE O.ORDERSTATUS = 1                                
                                 ORDER BY O.DATEREGISTER";
 
