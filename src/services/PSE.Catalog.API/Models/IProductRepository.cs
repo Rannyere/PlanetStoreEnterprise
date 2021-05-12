@@ -7,7 +7,7 @@ namespace PSE.Catalog.API.Models
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<IEnumerable<Product>> GetAll();
+        Task<PagedResult<Product>> GetAll(int pageSize, int pageIndex, string query = null);
 
         Task<Product> GetById(Guid idProduct);
 

@@ -1,5 +1,5 @@
 ﻿@using PSE.WebApp.MVC.Extensions
-@model IEnumerable<PSE.WebApp.MVC.Models.ProductViewModel>
+@model PagedViewModel<PSE.WebApp.MVC.Models.ProductViewModel>
 
 @{
     ViewData["Title"] = "All products";
@@ -15,7 +15,7 @@
         <div class="container" style=" padding-top: 20px">
             <div class="row">
                 @{
-                    foreach (var product in Model.OrderBy(p => p.Name))
+                    foreach (var product in Model.List.Where(p => p.Activ).OrderBy(p => p.Name))
                     {
                         <div class="col-md-3">
                             <div href="#" class="card card-product-grid">
@@ -40,6 +40,9 @@
                     }
                 }
             </div>
+
+            <vc:pagination model-paged="@Model"></vc:pagination>
+
         </div>
     </div>
 </section>

@@ -7,7 +7,7 @@ namespace PSE.WebApp.MVC.Services.Interfaces
 {
     public interface ICatalogService
     {
-        Task<IEnumerable<ProductViewModel>> GetAllProducts();
+        Task<PagedViewModel<ProductViewModel>> GetAllProducts(int pageSize, int pageIndex, string query = null);
 
         Task<ProductViewModel> GetProductById(Guid id);
     }

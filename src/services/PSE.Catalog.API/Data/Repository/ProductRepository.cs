@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using PSE.Catalog.API.Models;
 using PSE.Core.Data;
@@ -19,9 +20,29 @@ namespace PSE.Catalog.API.Data.Repository
 
         public IUnityOfWork UnitOfWork => _context;
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<PagedResult<Product>> GetAll(int pageSize, int pageIndex, string query = null)
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            var sql = @$"SELECT * FROM Products 
+                      WHERE (@Search IS NULL OR Name LIKE @Search) 
+                      ORDER BY Name 
+                      LIMIT {pageSize * (pageIndex - 1)}, {pageSize};   
+                      SELECT COUNT(Id) FROM Products 
+                      WHERE (@Search IS NULL OR Name LIKE @Search);";
+
+            var multi = await _context.Database.GetDbConnection()
+                .QueryMultipleAsync(sql, new { Search = "%" + query + "%" });
+
+            var products = multi.Read<Product>();
+            var total = multi.Read<int>().FirstOrDefault();
+
+            return new PagedResult<Product>()
+            {
+                List = products,
+                TotalResults = total,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Query = query
+            };
         }
 
         public async Task<Product> GetById(Guid idProduct)

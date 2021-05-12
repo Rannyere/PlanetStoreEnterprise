@@ -17,9 +17,11 @@ namespace PSE.WebApp.MVC.Controllers
         [HttpGet]
         [Route("")]
         [Route("showcase")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
-            var products = await _catalogService.GetAllProducts();
+            var products = await _catalogService.GetAllProducts(ps, page, q);
+            ViewBag.Search = q;
+            products.ReferenceAction = "Index";
 
             return View(products);
         }
