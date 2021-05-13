@@ -147,7 +147,7 @@ namespace PSE.Identification.API.Controllers
             {
                 Issuer = currentIssuer,
                 Subject = claimsIdentity,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationHours),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = key
             });
 
@@ -159,7 +159,7 @@ namespace PSE.Identification.API.Controllers
             return new UserLoginTokenResponse
             {
                 AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
+                ExpiresIn = TimeSpan.FromHours(1).TotalSeconds,
                 UserToken = new UserToken
                 {
                     Id = user.Id,
