@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NetDevPack.Security.JwtSigningCredentials.Interfaces;
 using PSE.Core.Messages.Integration;
 using PSE.Identification.API.Models;
 using PSE.MessageBus;
 using PSE.WebAPI.Core.Controllers;
 using PSE.WebAPI.Core.Identification;
+using PSE.WebAPI.Core.User;
 
 namespace PSE.Identification.API.Controllers
 {
@@ -23,18 +25,24 @@ namespace PSE.Identification.API.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly IAspNetUser _aspNetUser;
+        private readonly IJsonWebKeySetService _jwksService;
 
         private IMessageBus _bus;
 
         public AuthController(SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
                               IOptions<AppSettings> appSettings,
-                              IMessageBus bus)                           
+                              IMessageBus bus,
+                              IAspNetUser aspNetUser,
+                              IJsonWebKeySetService jwksService)                           
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
             _bus = bus;
+            _aspNetUser = aspNetUser;
+            _jwksService = jwksService;
         }
 
         [HttpPost("register")]
@@ -130,15 +138,17 @@ namespace PSE.Identification.API.Controllers
         private string CodifyToken(ClaimsIdentity claimsIdentity)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            var currentIssuer = $"{_aspNetUser.GetHttpContext().Request.Scheme}://{_aspNetUser.GetHttpContext().Request.Host}";
+
+            var key = _jwksService.GetCurrent();
 
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = _appSettings.Issuer,
-                Audience = _appSettings.ValidOn,
+                Issuer = currentIssuer,
                 Subject = claimsIdentity,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationHours),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = key
             });
 
             return tokenHandler.WriteToken(token);

@@ -20,6 +20,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
+    <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.AspNetCore" Version="5.0.6" />
+    <PackageReference Include="NetDevPack.Security.JwtSigningCredentials.Store.EntityFrameworkCore" Version="5.0.6" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
