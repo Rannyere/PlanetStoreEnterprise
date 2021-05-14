@@ -37,5 +37,16 @@ namespace PSE.WebAPI.Core.User
             var claim = principal.FindFirst("JWT");
             return claim?.Value;
         }
+
+        public static string SearchUserRefreshToken(this ClaimsPrincipal principal)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentException(nameof(principal));
+            }
+
+            var claim = principal.FindFirst("RefreshToken");
+            return claim?.Value;
+        }
     }
 }

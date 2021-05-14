@@ -31,6 +31,11 @@ namespace PSE.WebAPI.Core.User
             return IsAuthenticated() ? _accessor.HttpContext.User.SearchUserToken() : "";
         }
 
+        public string GetUserRefreshToken()
+        {
+            return IsAuthenticated() ? _accessor.HttpContext.User.SearchUserRefreshToken() : "";
+        }
+
         public IEnumerable<Claim> GetClaims()
         {
             return _accessor.HttpContext.User.Claims;
