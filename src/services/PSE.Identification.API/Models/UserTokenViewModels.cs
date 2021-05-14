@@ -19,6 +19,7 @@ namespace PSE.Identification.API.Models
     public class UserLoginTokenResponse
     {
         public string AccessToken { get; set; }
+        public Guid RefreshToken { get; set; }
         public double ExpiresIn { get; set; }
         public UserToken UserToken { get; set; }
     }

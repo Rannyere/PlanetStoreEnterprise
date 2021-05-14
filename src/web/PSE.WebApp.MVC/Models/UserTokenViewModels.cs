@@ -20,6 +20,7 @@ namespace PSE.WebApp.MVC.Models
     public class UserLoginTokenResponse
     {
         public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         public double ExpiresIn { get; set; }
         public UserToken UserToken { get; set; }
         public ResponseErrorResult ResponseErrorResult { get; set; }

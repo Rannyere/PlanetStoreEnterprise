@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using PSE.WebAPI.Core.Identification;
 using NetDevPack.Security.JwtSigningCredentials.AspNetCore;
 using PSE.WebAPI.Core.User;
+using PSE.Identification.API.Services;
 
 namespace PSE.Identification.API.Configuration
 {
@@ -14,6 +15,8 @@ namespace PSE.Identification.API.Configuration
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<AuthenticationService>();
 
             services.AddScoped<IAspNetUser, AspNetUser>();
 
