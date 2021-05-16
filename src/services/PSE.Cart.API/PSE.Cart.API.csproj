@@ -15,6 +15,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.37.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+		<Protobuf Include="Protos\cartschema.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +28,8 @@
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
+    <Folder Include="Protos\" />
+    <Folder Include="Services\gRPC\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">

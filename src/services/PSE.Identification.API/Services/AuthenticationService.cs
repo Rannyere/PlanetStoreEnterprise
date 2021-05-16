@@ -90,7 +90,7 @@ namespace PSE.Identification.API.Services
             {
                 Issuer = currentIssuer,
                 Subject = claimsIdentity,
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = key
             });
 
