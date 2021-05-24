@@ -31,7 +31,7 @@ namespace PSE.Cart.API.Services.gRPC
 
             var cart = await GetCartCustomer() ?? new CartCustomer();
 
-            return MapCarrinhoClienteToProtoResponse(cart);
+            return MapCartCustomerToProtoResponse(cart);
         }
 
         private async Task<CartCustomer> GetCartCustomer()
@@ -41,7 +41,7 @@ namespace PSE.Cart.API.Services.gRPC
                 .FirstOrDefaultAsync(c => c.CustomerId == _user.GetUserId());
         }
 
-        private static CartCustomerResponse MapCarrinhoClienteToProtoResponse(CartCustomer cart)
+        private static CartCustomerResponse MapCartCustomerToProtoResponse(CartCustomer cart)
         {
             var cartProto = new CartCustomerResponse
             {

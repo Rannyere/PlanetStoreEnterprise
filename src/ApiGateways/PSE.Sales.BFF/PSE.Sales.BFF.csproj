@@ -3,12 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>b1323e3c-eded-4477-87dc-9def4422de79</UserSecretsId>
+    <Protobuf_ToolsOs Condition="'$([MSBuild]::IsOsPlatform(OSX))'">macosx</Protobuf_ToolsOs>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.10" />
+
+    <PackageReference Include="Google.Protobuf" Version="3.17.0" />
+	<PackageReference Include="Grpc.Net.ClientFactory" Version="2.37.0" />
+	<PackageReference Include="Grpc.Tools" Version="2.37.1" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +22,8 @@
     <Folder Include="Services\" />
     <Folder Include="Configurations\" />
     <Folder Include="DTOs\" />
+    <Folder Include="Protos\" />
+    <Folder Include="Services\gRPC\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.WebAPI.Core\PSE.WebAPI.Core.csproj">
@@ -28,5 +35,9 @@
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+		<Protobuf Include="..\..\services\PSE.Cart.API\Protos\cartschema.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

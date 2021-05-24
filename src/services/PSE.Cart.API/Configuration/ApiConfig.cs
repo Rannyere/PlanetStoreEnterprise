@@ -48,10 +48,12 @@ namespace PSE.Cart.API.Configuration
 
             app.UseAuthConfiguration();
 
+            app.UseGrpcWeb();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapGrpcService<CartGrpcService>().RequireCors("Total");
+                endpoints.MapGrpcService<CartGrpcService>().RequireCors("Total").EnableGrpcWeb();
             });
         }
     }

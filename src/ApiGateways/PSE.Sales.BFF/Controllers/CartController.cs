@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PSE.Sales.BFF.DTOs;
 using PSE.Sales.BFF.Services;
+using PSE.Sales.BFF.Services.gRPC;
 using PSE.WebAPI.Core.Controllers;
 
 namespace PSE.Sales.BFF.Controllers
@@ -13,14 +14,17 @@ namespace PSE.Sales.BFF.Controllers
     public class CartController : MainController
     {
         private readonly ICartService _cartService;
+        private readonly ICartGrpcService _cartGrpcService; //optional
         private readonly ICatalogService _catalogService;
         private readonly IOrderService _orderService;
 
         public CartController(ICartService cartService,
+                              ICartGrpcService cartGrpcService,
                               ICatalogService catalogService,
                               IOrderService orderService)
         {
             _cartService = cartService;
+            _cartGrpcService = cartGrpcService;
             _catalogService = catalogService;
             _orderService = orderService;
         }
