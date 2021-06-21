@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSE.Order.Infra", "src\serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSE.Payment.Gateway", "src\services\PSE.Payment.Gateway\PSE.Payment.Gateway.csproj", "{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{033AAA67-99B1-4FA5-A0DC-339805F89680}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,10 @@ Global
 		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B7A70CD-038A-46E5-9D9F-9B2338B4FC74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{033AAA67-99B1-4FA5-A0DC-339805F89680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033AAA67-99B1-4FA5-A0DC-339805F89680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033AAA67-99B1-4FA5-A0DC-339805F89680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033AAA67-99B1-4FA5-A0DC-339805F89680}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,22 +1,18 @@
 ﻿@model PSE.WebApp.MVC.Models.ErrorViewModel
 @{
-    ViewData["Title"] = "An error has occurred!";
+    ViewData["Title"] = @Model.Title;
 }
-
-@{
-    if (Model == null)
-    {
-        <div>
-            <h2>Ooops! An error has occurred, but don't worry. Our team will be notified and we will correct it soon!</h2>
-        </div>
-    }
-    else
-    {
-        ViewData["Title"] = Model.Title;
-
-        <div>
-            <h2>@Html.Raw(Model.Message)</h2>
-        </div>
-
-    }
-}
+<div class="container">
+    <div style="padding-top: 200px; text-align: center">
+        @{
+            if (Model == null)
+            {
+                <h2>Ooops! An error has occurred, but don't worry. Our team will be notified and we will correct it soon!</h2>
+            }
+            else
+            {
+                <h2>@Html.Raw(Model.Message)</h2>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,132 @@
+version: "3"
+
+services:
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq-planetstore
+        environment:
+            RABBITMQ_DEFAULT_USER: "planetstore"
+            RABBITMQ_DEFAULT_PASS: "planetstore"
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+    web-mvc:
+        image: planetstore-web-mvc-ecommerce:latest
+        container_name: planetstore-web-mvc-ecommerce
+        build:
+            context: ../src
+            dockerfile: ./web/PSE.WebApp.MVC/Dockerfile
+        ports: 
+            - "50146:50146"            
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:50146
+        depends_on:
+            - api-catalog
+
+    api-identification:
+        image: planetstore-api-identification:latest
+        container_name: planetstore-api-identification   
+        build: 
+            context: ../src
+            dockerfile: ./services/PSE.Identification.API/Dockerfile
+        ports:
+            - "20840:20840"   
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:20840
+        depends_on:
+            - rabbitmq
+    
+    api-cart:
+        image: planetstore-api-cart:latest
+        container_name: planetstore-api-cart
+        build: 
+            context: ../src
+            dockerfile: ./services/PSE.Cart.API/Dockerfile      
+        ports: 
+            - "27444:27444"             
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:27444
+        depends_on:
+            - rabbitmq
+            - api-identification     
+
+    api-catalog:
+        image: planetstore-api-catalog:latest
+        container_name: planetstore-api-catalog
+        build:
+            context: ../src
+            dockerfile: ./services/PSE.Catalog.API/Dockerfile
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5011
+        depends_on:
+            - rabbitmq
+
+    api-clients:
+        image: planetstore-api-clients:latest
+        container_name: planetstore-api-clients    
+        build: 
+            context: ../src
+            dockerfile: ./services/PSE.Clients.API/Dockerfile
+        ports: 
+            - "17530:17530" 
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:17530
+        depends_on:
+            - rabbitmq
+            - api-identification
+
+    api-sales-bff:
+        image: planetstore-api-sales-bff:latest
+        container_name: planetstore-api-sales-bff
+        build: 
+            context: ../src
+            dockerfile: ./ApiGateways/PSE.Sales.BFF/Dockerfile  
+        ports: 
+            - "59188:59188" 
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:59188
+        depends_on:
+            - rabbitmq
+            - api-identification
+            - api-cart
+            - api-payment
+            - api-order
+    
+    api-payment:
+        image: planetstore-api-payment:latest
+        container_name: planetstore-api-payment    
+        build: 
+            context: ../src
+            dockerfile: ./services/PSE.Payment.API/Dockerfile
+        ports: 
+            - "60741:60741" 
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:60741
+        depends_on:
+            - rabbitmq
+            - api-identification
+            - api-order
+            
+    api-order:
+        image: planetstore-api-order:latest
+        container_name: planetstore-api-order    
+        build: 
+            context: ../src
+            dockerfile: ./services/PSE.Order.API/Dockerfile 
+        ports: 
+            - "47207:47207"             
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:47207
+        depends_on:
+            - rabbitmq
+            - api-identification 

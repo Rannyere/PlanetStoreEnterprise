@@ -3,8 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>9e44ebe9-c4af-4828-aacf-6ce51e85125b</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />
   <ItemGroup>
     <Folder Include="Configuration\" />
     <Folder Include="Views\Identification\" />
@@ -31,12 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\css\responsive.css" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\banners\planetstore_background.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\buildingBlocks\PSE.Core\PSE.Core.csproj">

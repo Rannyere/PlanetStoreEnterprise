@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  pse.catalog.api:
+    image: ${DOCKER_REGISTRY-}psecatalog
+    build:
+      context: .
+      dockerfile: src/services/PSE.Catalog.API/Dockerfile
+
+  pse.clients.api:
+    image: ${DOCKER_REGISTRY-}pseclients
+    build:
+      context: .
+      dockerfile: src/services/PSE.Clients.API/Dockerfile
+
+
+  pse.identification.api:
+    image: ${DOCKER_REGISTRY-}pseidentification
+    build:
+      context: .
+      dockerfile: src/services/PSE.Identification.API/Dockerfile
+
+
+  pse.sales.bff:
+    image: ${DOCKER_REGISTRY-}psesales
+    build:
+      context: .
+      dockerfile: src/ApiGateways/PSE.Sales.BFF/Dockerfile
+
+
+  pse.cart.api:
+    image: ${DOCKER_REGISTRY-}psecart
+    build:
+      context: .
+      dockerfile: src/services/PSE.Cart.API/Dockerfile
+
+
+  pse.order.api:
+    image: ${DOCKER_REGISTRY-}pseorder
+    build:
+      context: .
+      dockerfile: src/services/PSE.Order.API/Dockerfile
+
+
+  pse.payment.api:
+    image: ${DOCKER_REGISTRY-}psepayment
+    build:
+      context: .
+      dockerfile: src/services/PSE.Payment.API/Dockerfile
+

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>3b9956e9-2b7d-4797-8155-c1255c50f113</UserSecretsId>  
+    <DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
     
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />

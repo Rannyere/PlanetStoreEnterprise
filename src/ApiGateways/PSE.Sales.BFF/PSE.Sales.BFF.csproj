@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>b1323e3c-eded-4477-87dc-9def4422de79</UserSecretsId>
     <Protobuf_ToolsOs Condition="'$([MSBuild]::IsOsPlatform(OSX))'">macosx</Protobuf_ToolsOs>
+    <DockerComposeProjectPath>../../../docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHosting' " />

@@ -8,20 +8,14 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "PSE.WebApp.MVC": {
+
+    "SelfHosting": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:50146;http://localhost:40987",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:50146;http://localhost:40987"
     }
   }
 }
