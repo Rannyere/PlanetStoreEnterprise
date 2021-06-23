@@ -39,7 +39,7 @@ namespace PSE.Order.API.Application.Commands
             {
                 RuleFor(c => c.CustomerId)
                     .NotEqual(Guid.Empty)
-                    .WithMessage("Invalid customer ido");
+                    .WithMessage("Invalid customer id");
 
                 RuleFor(c => c.OrderItems.Count)
                     .GreaterThan(0)

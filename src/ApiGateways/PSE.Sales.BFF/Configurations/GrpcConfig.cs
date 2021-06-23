@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PSE.Cart.API.Services.gRPC;
 using PSE.Sales.BFF.Services.gRPC;
+using PSE.WebAPI.Core.Extensions;
 
 namespace PSE.Sales.BFF.Configurations
 {
@@ -17,7 +18,8 @@ namespace PSE.Sales.BFF.Configurations
             services.AddGrpcClient<CartGrpcIntegration.CartGrpcIntegrationClient>(options =>
             {
                 options.Address = new Uri(configuration["CartUrl"]);
-            }).AddInterceptor<GrpcServiceInterceptor>();
+            }).AddInterceptor<GrpcServiceInterceptor>()
+            .AllowSelfSignedCertificate();
         }
     }
 }
