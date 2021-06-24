@@ -27,15 +27,15 @@ namespace PSE.Order.API.Application.Queries
         public async Task<OrderCustomerDTO> GetLastOrder(Guid customerId)
         {
             const string sql = @"SELECT
-                                O.ID AS 'ProductId', O.CODE, O.VOUCHERUSAGE, O.DISCOUNT, O.TOTALVALUE, O.ORDERSTATUS,
-                                O.STREET, O.NUMBER, O.NEIGHBORHOOD, O.ZIPCODE, O.COMPLEMENT, O.CITY, O.STATE,
-                                OIT.ID AS 'ProductItemId',OIT.NAME, OIT.QUANTITY, OIT.IMAGE, OIT.VALUE 
-                                FROM ORDERS O 
-                                INNER JOIN ORDERITEMS OIT ON O.ID = OIT.ORDERID 
-                                WHERE O.CUSTOMERID = @customerId 
-                                AND O.DATEREGISTER >= DATE_SUB(NOW(),INTERVAL 1 MINUTE)
-                                AND O.ORDERSTATUS = 1 
-                                ORDER BY O.DATEREGISTER DESC";
+                                O.ID AS 'ProductId', O.Code, O.VoucherUsage, O.Discount, O.TotalValue, O.OrderStatus,
+                                O.Street, O.Number, O.Neighborhood, O.ZipCode, O.Complement, O.City	, O.State,
+                                OIT.Id AS 'ProductItemId',OIT.Name, OIT.Quantity, OIT.Image, OIT.Value 
+                                FROM Orders O 
+                                INNER JOIN OrderItems OIT ON O.Id = OIT.OrderId 
+                                WHERE O.CustomerId = @customerId 
+                                AND O.DateRegister >= DATE_SUB(NOW(),INTERVAL 1 MINUTE)
+                                AND O.OrderStatus = 1 
+                                ORDER BY O.DateRegister DESC";
 
             var order = await _orderRepository.GetConnection()
                 .QueryAsync<dynamic>(sql, new { customerId });
@@ -53,12 +53,12 @@ namespace PSE.Order.API.Application.Queries
         public async Task<OrderCustomerDTO> GetOrdersAuthorized()
         {
             const string sql = @"SELECT 
-                                O.ID as 'OrderId', O.ID, O.CUSTOMERID, 
-                                OI.ID as 'OrderItemId', OI.ID, OI.PRODUCTID, OI.QUANTITY 
-                                FROM ORDERS O 
-                                INNER JOIN ORDERITEMS OI ON O.ID = OI.ORDERID 
-                                WHERE O.ORDERSTATUS = 1                                
-                                ORDER BY O.DATEREGISTER";
+                                O.Id as 'OrderId', O.Id, O.CustomerId, 
+                                OI.ID as 'OrderItemId', OI.Id, OI.ProductId, OI.Quantity 
+                                FROM Orders O 
+                                INNER JOIN OrderItems OI ON O.Id = OI.OrderId
+                                WHERE O.OrderStatus = 1                                
+                                ORDER BY O.DateRegister";
 
             // Use of the lookup to maintain the status for each record cycle returned
             var lookup = new Dictionary<Guid, OrderCustomerDTO>();
@@ -84,22 +84,22 @@ namespace PSE.Order.API.Application.Queries
         {
             var order = new OrderCustomerDTO
             {
-                Code = Convert.ToInt32(result[0].CODE),
-                OrderStatus = Convert.ToInt32(result[0].ORDERSTATUS),
-                TotalValue = Convert.ToDecimal(result[0].TOTALVALUE),
-                Discount = Convert.ToDecimal(result[0].DISCOUNT),
-                VoucherUsage = Convert.ToBoolean(result[0].VOUCHERUSAGE),
+                Code = Convert.ToInt32(result[0].Code),
+                OrderStatus = Convert.ToInt32(result[0].OrderStatus),
+                TotalValue = Convert.ToDecimal(result[0].TotalValue),
+                Discount = Convert.ToDecimal(result[0].Discount),
+                VoucherUsage = Convert.ToBoolean(result[0].VoucherUsage),
 
                 OrderItems = new List<OrderItemDTO>(),
                 Address = new AddressDTO
                 {
-                    Street = result[0].STREET,
-                    Neighborhood = result[0].NEIGHBORHOOD,
-                    ZipCode = result[0].ZIPCODE,
-                    City = result[0].CITY,
-                    Complement = result[0].COMPLEMENT,
-                    State = result[0].STATE,
-                    Number = result[0].NUMBER
+                    Street = result[0].Street,
+                    Neighborhood = result[0].Neighborhood,
+                    ZipCode = result[0].ZipCode,
+                    City = result[0].City,
+                    Complement = result[0].Complement,
+                    State = result[0].State,
+                    Number = result[0].Number
                 }
             };
 
@@ -107,10 +107,10 @@ namespace PSE.Order.API.Application.Queries
             {
                 var orderItem = new OrderItemDTO
                 {
-                    Name = item.NAME,
-                    Value = item.VALUE,
-                    Quantity = item.QUANTITY,
-                    Image = item.IMAGE
+                    Name = item.Name,
+                    Value = Convert.ToDecimal(item.Value),
+                    Quantity = Convert.ToInt32(item.Quantity),
+                    Image = item.Image
                 };
 
                 order.OrderItems.Add(orderItem);
