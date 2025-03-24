@@ -5,42 +5,41 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSE.WebApp.MVC.Configuration;
 
-namespace PSE.WebApp.MVC
+namespace PSE.WebApp.MVC;
+
+public class Startup
 {
-    public class Startup
+    public IConfiguration Configuration { get; }
+
+    public Startup(IHostEnvironment hostEnvironment)
     {
-        public IConfiguration Configuration { get; }
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(hostEnvironment.ContentRootPath)
+            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+            .AddEnvironmentVariables();
 
-        public Startup(IHostEnvironment hostEnvironment)
+        if (hostEnvironment.IsDevelopment())
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables();
-
-            if (hostEnvironment.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
-
-            Configuration = builder.Build();
+            builder.AddUserSecrets<Startup>();
         }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddAuthenticateIdentityConfiguration();
+        Configuration = builder.Build();
+    }
 
-            services.AddAMvcConfiguration(Configuration);
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddAuthenticateIdentityConfiguration(Configuration);
 
-            services.RegisterServices(Configuration);
-        }
+        services.AddAMvcConfiguration(Configuration);
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseAuthenticateIdentityConfiguration();
+        services.RegisterServices(Configuration);
+    }
 
-            app.UseMvcConfiguration(env);
-        }
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseAuthenticateIdentityConfiguration();
+
+        app.UseMvcConfiguration(env);
     }
 }

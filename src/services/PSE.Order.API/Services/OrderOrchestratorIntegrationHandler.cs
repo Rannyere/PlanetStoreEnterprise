@@ -1,41 +1,47 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PSE.Core.Messages.Integration;
 using PSE.MessageBus;
 using PSE.Order.API.Application.Queries;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace PSE.Order.API.Services
+namespace PSE.Order.API.Services;
+
+public class OrderOrchestratorIntegrationHandler : IHostedService, IDisposable
 {
-    public class OrderOrchestratorIntegrationHandler : IHostedService, IDisposable
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<OrderOrchestratorIntegrationHandler> _logger;
+    private Timer _timer;
+    private bool _isProcessing;
+
+    public OrderOrchestratorIntegrationHandler(IServiceProvider serviceProvider,
+                                               ILogger<OrderOrchestratorIntegrationHandler> logger)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<OrderOrchestratorIntegrationHandler> _logger;
-        private Timer _timer;
+        _serviceProvider = serviceProvider;
+        _logger = logger;
+    }
 
-        public OrderOrchestratorIntegrationHandler(IServiceProvider serviceProvider,
-                                                   ILogger<OrderOrchestratorIntegrationHandler> logger)
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Order processing service started");
+
+        _timer = new Timer(ProcessOrders, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
+
+        return Task.CompletedTask;
+    }
+
+    private async void ProcessOrders(object state)
+    {
+        if (_isProcessing) return;
+
+        try
         {
-            _serviceProvider = serviceProvider;
-            _logger = logger;
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("order processing service started");
-
-            _timer = new Timer(ProcessOrders, null, TimeSpan.Zero, TimeSpan.FromSeconds(15));
-
-            return Task.CompletedTask;
-        }
-
-        private async void ProcessOrders(object state)
-        {
-            _logger.LogInformation("order processing service in progress");
+            _isProcessing = true;
+            _logger.LogInformation("Order processing service in progress");
 
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -54,19 +60,27 @@ namespace PSE.Order.API.Services
                 _logger.LogInformation($"Order ID: {order.Id} forwarded to CatalogAPI to manage inventory - subtract items from stock.");
             }
         }
-
-        public Task StopAsync(CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            _logger.LogInformation("order processing service closed");
-
-            _timer.Change(Timeout.Infinite, 0);
-
-            return Task.CompletedTask;
+            _logger.LogError(ex, "Error processing orders");
         }
-
-        public void Dispose()
+        finally
         {
-            _timer.Dispose();
+            _isProcessing = false;
         }
     }
-}
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Order processing service closed");
+
+        _timer?.Change(Timeout.Infinite, 0);
+
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

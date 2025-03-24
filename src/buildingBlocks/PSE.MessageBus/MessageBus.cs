@@ -1,110 +1,127 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using EasyNetQ;
-using Polly;
+using MassTransit;
 using PSE.Core.Messages.Integration;
-using RabbitMQ.Client.Exceptions;
+using System;
+using System.Threading.Tasks;
 
-namespace PSE.MessageBus
+namespace PSE.MessageBus;
+
+public class MessageBus : IMessageBus, IDisposable
 {
-    public class MessageBus : IMessageBus
+    private readonly IBusControl _bus;
+
+    public MessageBus(string connectionString)
     {
-        private IBus _bus;
-        private IAdvancedBus _advancedBus;
-
-        private readonly string _connectionString;
-
-        public MessageBus(string connectionString)
+        _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
         {
-            _connectionString = connectionString;
-            TryConnect();
-        }
-
-        public bool IsConnected => _bus?.Advanced.IsConnected ?? false;
-        public IAdvancedBus AdvancedBus => _bus?.Advanced;
-
-        public void Publish<T>(T message) where T : IntegrationEvent
-        {
-            TryConnect();
-            _bus.PubSub.Publish(message);
-        }
-
-        public async Task PublishAsync<T>(T message) where T : IntegrationEvent
-        {
-            TryConnect();
-            await _bus.PubSub.PublishAsync(message);
-        }
-
-        public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
-        {
-            TryConnect();
-            _bus.PubSub.Subscribe(subscriptionId, onMessage);
-        }
-
-        public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
-        {
-            TryConnect();
-            _bus.PubSub.SubscribeAsync(subscriptionId, onMessage);
-        }
-
-        public TResponse Request<TRequest, TResponse>(TRequest request) where TRequest : IntegrationEvent
-            where TResponse : ResponseMessage
-        {
-            TryConnect();
-            return _bus.Rpc.Request<TRequest, TResponse>(request);
-        }
-
-        public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
-        {
-            TryConnect();
-            return await _bus.Rpc.RequestAsync<TRequest, TResponse>(request);
-        }
-
-        public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
-        {
-            TryConnect();
-            return _bus.Rpc.Respond(responder);
-        }
-
-        public Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
-        {
-            TryConnect();
-            return _bus.Rpc.RespondAsync(responder);
-        }
-
-        private void TryConnect()
-        {
-            if (IsConnected) return;
-
-            var policy = Policy.Handle<EasyNetQException>()
-                .Or<BrokerUnreachableException>()
-                .WaitAndRetry(3, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-            policy.Execute(() =>
+            cfg.Host(new Uri(connectionString), h =>
             {
-                _bus = RabbitHutch.CreateBus(_connectionString);
-                _advancedBus = _bus.Advanced;
-                _advancedBus.Disconnected += OnDisconnect;
+                h.Username("guest");
+                h.Password("guest");
             });
-        }
+        });
 
-        private void OnDisconnect(object s, EventArgs e)
+        _bus.StartAsync();
+    }
+
+    public bool IsConnected => _bus != null;
+
+    public void Publish<T>(T message) where T : IntegrationEvent
+    {
+        _bus.Publish(message);
+    }
+
+    public async Task PublishAsync<T>(T message) where T : IntegrationEvent
+    {
+        await _bus.Publish(message);
+    }
+
+    public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
+    {
+        _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
         {
-            var policy = Policy.Handle<EasyNetQException>()
-                .Or<BrokerUnreachableException>()
-                .RetryForever();
+            cfg.Handler<T>(context =>
+            {
+                onMessage(context.Message);
+                return Task.CompletedTask;
+            });
+        });
+    }
 
-            policy.Execute(TryConnect);
+    public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
+    {
+        _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
+        {
+            cfg.Handler<T>(context => onMessage(context.Message));
+        });
+    }
+
+    public TResponse Request<TRequest, TResponse>(TRequest request)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage
+    {
+        var client = _bus.CreateRequestClient<TRequest>();
+        var response = client.GetResponse<TResponse>(request).GetAwaiter().GetResult();
+        return response.Message;
+    }
+
+    public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage
+    {
+        var client = _bus.CreateRequestClient<TRequest>();
+        var response = await client.GetResponse<TResponse>(request);
+        return response.Message;
+    }
+
+    public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage
+    {
+        var handle = _bus.ConnectReceiveEndpoint($"respond-{typeof(TRequest).Name}", cfg =>
+        {
+            cfg.Handler<TRequest>(async context =>
+            {
+                var response = responder(context.Message);
+                await context.RespondAsync(response);
+            });
+        });
+
+        return new EndpointHandleAdapter(handle);
+    }
+
+    public async Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage
+    {
+        var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
+        {
+            cfg.Handler<TRequest>(async context =>
+            {
+                var response = await responder(context.Message);
+                await context.RespondAsync(response);
+            });
+        });
+
+        return new EndpointHandleAdapter(handle);
+    }
+
+    public void Dispose()
+    {
+        _bus?.Stop();
+    }
+
+    private class EndpointHandleAdapter : IDisposable
+    {
+        private readonly HostReceiveEndpointHandle _handle;
+
+        public EndpointHandleAdapter(HostReceiveEndpointHandle handle)
+        {
+            _handle = handle;
         }
 
         public void Dispose()
         {
-            _bus.Dispose();
+            _handle?.StopAsync().GetAwaiter().GetResult();
         }
     }
 }

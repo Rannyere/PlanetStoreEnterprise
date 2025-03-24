@@ -1,39 +1,38 @@
-﻿using System.Collections.Generic;
 using FluentValidation.Results;
+using System.Collections.Generic;
 
-namespace PSE.Core.Specification.Validation
+namespace PSE.Core.Specification.Validation;
+
+public class SpecValidator<T>
 {
-    public class SpecValidator<T>
+    private readonly Dictionary<string, Rule<T>> _validations = new Dictionary<string, Rule<T>>();
+
+    public ValidationResult Validate(T obj)
     {
-        private readonly Dictionary<string, Rule<T>> _validations = new Dictionary<string, Rule<T>>();
-
-        public ValidationResult Validate(T obj)
+        var validationResult = new ValidationResult();
+        foreach (var rule in _validations.Keys)
         {
-            var validationResult = new ValidationResult();
-            foreach (var rule in _validations.Keys)
-            {
-                var validation = _validations[rule];
-                if (!validation.Validate(obj))
-                    validationResult.Errors.Add(new ValidationFailure(obj.GetType().Name, validation.ErrorMessage));
-            }
-
-            return validationResult;
+            var validation = _validations[rule];
+            if (!validation.Validate(obj))
+                validationResult.Errors.Add(new ValidationFailure(obj.GetType().Name, validation.ErrorMessage));
         }
 
-        protected void Add(string name, Rule<T> rule)
-        {
-            _validations.Add(name, rule);
-        }
-
-        protected void Remove(string name)
-        {
-            _validations.Remove(name);
-        }
-
-        protected Rule<T> GetRule(string name)
-        {
-            _validations.TryGetValue(name, out var rule);
-            return rule;
-        }
+        return validationResult;
     }
-}
+
+    protected void Add(string name, Rule<T> rule)
+    {
+        _validations.Add(name, rule);
+    }
+
+    protected void Remove(string name)
+    {
+        _validations.Remove(name);
+    }
+
+    protected Rule<T> GetRule(string name)
+    {
+        _validations.TryGetValue(name, out var rule);
+        return rule;
+    }
+}

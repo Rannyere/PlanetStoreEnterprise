@@ -1,21 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
 using PSE.WebApp.MVC.Models;
+using System.Threading.Tasks;
 
-namespace PSE.WebApp.MVC.Services.Interfaces
+namespace PSE.WebApp.MVC.Services.Interfaces;
+
+public interface IAuthenticateService
 {
-    public interface IAuthenticateService
-    {
-        Task<UserLoginTokenResponse> LoginUser(LoginUser loginUser);
+    Task<UserLoginTokenResponse> LoginUser(LoginUser loginUser);
 
-        Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser);
+    Task<UserLoginTokenResponse> RegisterUser(RegisterUser registerUser);
 
-        Task ConnectAccount(UserLoginTokenResponse userLoginTokenResponse);
+    Task ConnectAccount(UserLoginTokenResponse userLoginTokenResponse);
 
-        Task Logout();
+    Task Logout();
 
-        bool TokenExpired();
+    bool TokenExpired();
 
-        Task<bool> RefreshTokenIsValid();
-    }
+    Task<bool> RefreshTokenIsValid();
 }

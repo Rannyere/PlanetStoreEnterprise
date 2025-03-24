@@ -1,10 +1,9 @@
-﻿using System;
 using PSE.Core.DomainObjects;
+using System;
 
-namespace PSE.Core.Data
+namespace PSE.Core.Data;
+
+public interface IRepository<T> : IDisposable where T : IAggregatedRoot
 {
-    public interface IRepository<T> : IDisposable where T : IAggregatedRoot
-    {
-        IUnityOfWork UnitOfWork { get; }
-    }
-}
+    IUnityOfWork UnitOfWork { get; }
+}

@@ -1,8 +1,6 @@
-﻿using System;
-namespace PSE.WebApp.MVC.Models
+namespace PSE.WebApp.MVC.Models;
+
+public class VoucherViewModel
 {
-    public class VoucherViewModel
-    {
-        public string Code { get; set; }
-    }
-}
+    public string Code { get; set; }
+}

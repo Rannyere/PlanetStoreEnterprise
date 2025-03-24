@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
 using PSE.Core.Responses;
 using PSE.WebApp.MVC.Models;
+using System.Threading.Tasks;
 
-namespace PSE.WebApp.MVC.Services.Interfaces
+namespace PSE.WebApp.MVC.Services.Interfaces;
+
+public interface ICustomerService
 {
-    public interface ICustomerService
-    {
-        Task<AddressViewModel> GetAddress();
+    Task<AddressViewModel> GetAddress();
 
-        Task<ResponseErrorResult> AddAddress(AddressViewModel address);
-    }
-}
+    Task<ResponseErrorResult> AddAddress(AddressViewModel address);
+}

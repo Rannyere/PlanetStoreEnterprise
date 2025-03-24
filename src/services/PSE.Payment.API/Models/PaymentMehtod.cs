@@ -1,9 +1,7 @@
-﻿using System;
-namespace PSE.Payment.API.Models
+namespace PSE.Payment.API.Models;
+
+public enum PaymentMehtod
 {
-    public enum PaymentMehtod
-    {
-        CreditCard = 1,
-        Billet
-    }
-}
+    CreditCard = 1,
+    Billet
+}

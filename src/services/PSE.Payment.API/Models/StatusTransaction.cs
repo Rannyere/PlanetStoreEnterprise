@@ -1,12 +1,10 @@
-﻿using System;
-namespace PSE.Payment.API.Models
+namespace PSE.Payment.API.Models;
+
+public enum StatusTransaction
 {
-    public enum StatusTransaction
-    {
-        Authorized = 1,
-        Paid,
-        Denied,
-        Refunded,
-        Canceled
-    }
-}
+    Authorized = 1,
+    Paid,
+    Denied,
+    Refunded,
+    Canceled
+}

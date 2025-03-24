@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 
-namespace PSE.Core.Specification
+namespace PSE.Core.Specification;
+
+public class GenericSpecification<T>
 {
-    public class GenericSpecification<T>
+    private Expression<Func<T, bool>> Expression { get; }
+
+    public GenericSpecification(Expression<Func<T, bool>> expression)
     {
-        private Expression<Func<T, bool>> Expression { get; }
-
-        public GenericSpecification(Expression<Func<T, bool>> expression)
-        {
-            Expression = expression;
-        }
-
-        public bool IsSatisfiedBy(T entity)
-        {
-            return Expression.Compile().Invoke(entity);
-        }
+        Expression = expression;
     }
-}
+
+    public bool IsSatisfiedBy(T entity)
+    {
+        return Expression.Compile().Invoke(entity);
+    }
+}

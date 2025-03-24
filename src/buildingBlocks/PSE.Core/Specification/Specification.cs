@@ -1,41 +1,40 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 
-namespace PSE.Core.Specification
+namespace PSE.Core.Specification;
+
+public abstract class Specification<T>
 {
-    public abstract class Specification<T>
+    private static readonly Specification<T> All = new IdentitySpecification<T>();
+
+    public bool IsSatisfiedBy(T entity)
     {
-        private static readonly Specification<T> All = new IdentitySpecification<T>();
+        var predicate = ToExpression().Compile();
+        return predicate(entity);
+    }
 
-        public bool IsSatisfiedBy(T entity)
-        {
-            var predicate = ToExpression().Compile();
-            return predicate(entity);
-        }
+    public abstract Expression<Func<T, bool>> ToExpression();
 
-        public abstract Expression<Func<T, bool>> ToExpression();
+    public Specification<T> And(Specification<T> specification)
+    {
+        if (this == All)
+            return specification;
+        if (specification == All)
+            return this;
 
-        public Specification<T> And(Specification<T> specification)
-        {
-            if (this == All)
-                return specification;
-            if (specification == All)
-                return this;
+        return new AndSpecification<T>(this, specification);
+    }
 
-            return new AndSpecification<T>(this, specification);
-        }
+    public Specification<T> Or(Specification<T> specification)
+    {
+        if (this == All || specification == All)
+            return All;
 
-        public Specification<T> Or(Specification<T> specification)
-        {
-            if (this == All || specification == All)
-                return All;
+        return new OrSpecification<T>(this, specification);
+    }
 
-            return new OrSpecification<T>(this, specification);
-        }
-
-        public Specification<T> Not()
-        {
-            return new NotSpecification<T>(this);
-        }
+    public Specification<T> Not()
+    {
+        return new NotSpecification<T>(this);
     }
 }

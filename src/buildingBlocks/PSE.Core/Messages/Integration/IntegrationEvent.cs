@@ -1,8 +1,6 @@
-﻿using System;
-namespace PSE.Core.Messages.Integration
+namespace PSE.Core.Messages.Integration;
+
+public abstract class IntegrationEvent : Event
 {
-    public abstract class IntegrationEvent : Event
-    {
-        
-    }
-}
+
+}

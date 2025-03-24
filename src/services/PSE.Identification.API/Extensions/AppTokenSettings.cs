@@ -1,8 +1,6 @@
-﻿using System;
-namespace PSE.Identification.API.Extensions
+namespace PSE.Identification.API.Extensions;
+
+public class AppTokenSettings
 {
-    public class AppTokenSettings
-    {
-        public int RefreshTokenExpiration { get; set; }
-    }
-}
+    public int RefreshTokenExpiration { get; set; }
+}

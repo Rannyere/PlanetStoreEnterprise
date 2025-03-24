@@ -37,7 +37,7 @@
     },
     "SelfHosting": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:59188;http://localhost:54173",
       "environmentVariables": {

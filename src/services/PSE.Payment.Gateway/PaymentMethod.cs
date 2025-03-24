@@ -1,8 +1,7 @@
-﻿namespace PSE.Payment.Gateway
+namespace PSE.Payment.Gateway;
+
+public enum PaymentMethod
 {
-    public enum PaymentMethod
-    {
-        CreditCard = 1,
-        Billet
-    }
-}
+    CreditCard = 1,
+    Billet
+}

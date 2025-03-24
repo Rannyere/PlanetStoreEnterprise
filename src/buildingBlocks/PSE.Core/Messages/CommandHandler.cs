@@ -1,29 +1,27 @@
-﻿using System;
-using System.Threading.Tasks;
 using FluentValidation.Results;
 using PSE.Core.Data;
+using System.Threading.Tasks;
 
-namespace PSE.Core.Messages
+namespace PSE.Core.Messages;
+
+public abstract class CommandHandler
 {
-    public abstract class CommandHandler
+    protected ValidationResult ValidationResult;
+
+    protected CommandHandler()
     {
-        protected ValidationResult ValidationResult;
+        ValidationResult = new ValidationResult();
+    }
 
-        protected CommandHandler()
-        {
-            ValidationResult = new ValidationResult();
-        }
+    protected void AddErrors(string message)
+    {
+        ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
+    }
 
-        protected void AddErrors(string message)
-        {
-            ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
-        }
+    protected async Task<ValidationResult> PersistToBase(IUnityOfWork uow)
+    {
+        if (!await uow.Commit()) AddErrors("There was an error persisting the data");
 
-        protected async Task<ValidationResult> PersistToBase(IUnityOfWork uow)
-        {
-            if (!await uow.Commit()) AddErrors("There was an error persisting the data");
-
-            return ValidationResult;
-        }
+        return ValidationResult;
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace PSE.WebApp.MVC.Extensions
+namespace PSE.WebApp.MVC.Extensions;
+
+public class SummaryViewComponent : ViewComponent
 {
-    public class SummaryViewComponent : ViewComponent
+    public Task<IViewComponentResult> InvokeAsync()
     {
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            return View();
-        }
+        return Task.FromResult<IViewComponentResult>(View());
     }
 }

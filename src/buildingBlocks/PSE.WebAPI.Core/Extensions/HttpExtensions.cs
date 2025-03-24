@@ -1,23 +1,19 @@
-﻿using System;
-using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Net.Http;
 
-namespace PSE.WebAPI.Core.Extensions
+namespace PSE.WebAPI.Core.Extensions;
+
+public static class HttpExtensions
 {
-    public static class HttpExtensions
+    public static IHttpClientBuilder AllowSelfSignedCertificate(this IHttpClientBuilder builder)
     {
-        public static IHttpClientBuilder AllowSelfSignedCertificate(this IHttpClientBuilder builder)
+        if (builder == null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
-            return builder.ConfigureHttpMessageHandlerBuilder(b =>
-            {
-                b.PrimaryHandler =
-                    new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator };
-            });
+            throw new ArgumentNullException(nameof(builder));
         }
+
+        return builder.ConfigurePrimaryHttpMessageHandler(() =>
+            new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator });
     }
 }
