@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSE.Order.API.Configuration;
 using PSE.WebAPI.Core.Identification;
+using System;
 
 namespace PSE.Order.API;
 
@@ -36,7 +37,7 @@ public class Startup
 
         services.AddSwaggerConfiguration();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
         services.RegisterServices();
 

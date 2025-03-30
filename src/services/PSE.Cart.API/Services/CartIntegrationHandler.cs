@@ -21,16 +21,9 @@ public class CartIntegrationHandler : BackgroundService
         _serviceProvider = serviceProvider;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        SetSubscribers();
-        return Task.CompletedTask;
-    }
-
-    private void SetSubscribers()
-    {
-        _bus.SubscribeAsync<OrderExecutedIntegrationEvent>("OrderExecuted", async request =>
-            await DeleteCart(request));
+        await _bus.SubscribeAsync<OrderExecutedIntegrationEvent>("OrderExecuted", DeleteCart);
     }
 
     private async Task DeleteCart(OrderExecutedIntegrationEvent message)

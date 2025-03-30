@@ -1,11 +1,10 @@
 using MediatR;
 using PSE.Core.Messages.Integration;
 using PSE.MessageBus;
-using PSE.Order.API.Application.Events;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PSE.Cart.API.Application.Events;
+namespace PSE.Order.API.Application.Events;
 
 public class OrderEventHandler : INotificationHandler<OrderExecutedEvent>
 {

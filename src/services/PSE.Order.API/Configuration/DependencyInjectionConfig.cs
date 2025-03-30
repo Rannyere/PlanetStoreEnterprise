@@ -2,7 +2,6 @@ using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using PSE.Cart.API.Application.Events;
 using PSE.Core.Mediator;
 using PSE.Order.API.Application.Commands;
 using PSE.Order.API.Application.Events;
@@ -27,7 +26,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IRequestHandler<ExecuteOrderCommand, ValidationResult>, OrderCommandHandler>();
 
         // Events
-        services.AddScoped<INotificationHandler<OrderExecutedEvent>, OrderEventHandler>();
+       // services.AddScoped<INotificationHandler<OrderExecutedEvent>, OrderEventHandler>();
 
         // Application
         services.AddScoped<IMediatorHandler, MediatorHandler>();

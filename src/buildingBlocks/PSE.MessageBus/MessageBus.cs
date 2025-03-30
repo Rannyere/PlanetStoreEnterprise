@@ -3,125 +3,125 @@ using PSE.Core.Messages.Integration;
 using System;
 using System.Threading.Tasks;
 
-namespace PSE.MessageBus;
-
-public class MessageBus : IMessageBus, IDisposable
+namespace PSE.MessageBus
 {
-    private readonly IBusControl _bus;
-
-    public MessageBus(string connectionString)
+    public class MessageBus : IMessageBus, IDisposable
     {
-        _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
+        private readonly IBusControl _bus;
+
+        public MessageBus(string connectionString)
         {
-            cfg.Host(new Uri(connectionString), h =>
+            _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                cfg.Host(connectionString);
             });
-        });
 
-        _bus.StartAsync();
-    }
+            _bus.StartAsync();
+        }
 
-    public bool IsConnected => _bus != null;
+        public bool IsConnected => _bus?.CheckHealth().Status == BusHealthStatus.Healthy;
 
-    public void Publish<T>(T message) where T : IntegrationEvent
-    {
-        _bus.Publish(message);
-    }
-
-    public async Task PublishAsync<T>(T message) where T : IntegrationEvent
-    {
-        await _bus.Publish(message);
-    }
-
-    public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
-    {
-        _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
+        public void Publish<T>(T message) where T : IntegrationEvent
         {
-            cfg.Handler<T>(context =>
+            TryConnect();
+            _bus.Publish(message);
+        }
+
+        public async Task PublishAsync<T>(T message) where T : IntegrationEvent
+        {
+            TryConnect();
+            await _bus.Publish(message);
+        }
+
+        public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
+        {
+            TryConnect();
+            _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
             {
-                onMessage(context.Message);
-                return Task.CompletedTask;
+                cfg.Handler<T>(context =>
+                {
+                    onMessage(context.Message);
+                    return Task.CompletedTask;
+                });
             });
-        });
-    }
+        }
 
-    public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
-    {
-        _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
+        public async Task<HostReceiveEndpointHandle> SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
         {
-            cfg.Handler<T>(context => onMessage(context.Message));
-        });
-    }
-
-    public TResponse Request<TRequest, TResponse>(TRequest request)
-        where TRequest : IntegrationEvent
-        where TResponse : ResponseMessage
-    {
-        var client = _bus.CreateRequestClient<TRequest>();
-        var response = client.GetResponse<TResponse>(request).GetAwaiter().GetResult();
-        return response.Message;
-    }
-
-    public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
-        where TRequest : IntegrationEvent
-        where TResponse : ResponseMessage
-    {
-        var client = _bus.CreateRequestClient<TRequest>();
-        var response = await client.GetResponse<TResponse>(request);
-        return response.Message;
-    }
-
-    public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
-        where TRequest : IntegrationEvent
-        where TResponse : ResponseMessage
-    {
-        var handle = _bus.ConnectReceiveEndpoint($"respond-{typeof(TRequest).Name}", cfg =>
-        {
-            cfg.Handler<TRequest>(async context =>
+            TryConnect();
+            var handler = _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
             {
-                var response = responder(context.Message);
-                await context.RespondAsync(response);
+                cfg.Handler<T>(context =>
+                    onMessage(context.Message));
             });
-        });
+            return await Task.FromResult(handler);
+        }
 
-        return new EndpointHandleAdapter(handle);
-    }
-
-    public async Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
-        where TRequest : IntegrationEvent
-        where TResponse : ResponseMessage
-    {
-        var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
+        public TResponse Request<TRequest, TResponse>(TRequest request)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
         {
-            cfg.Handler<TRequest>(async context =>
+            TryConnect();
+            var client = _bus.CreateRequestClient<TRequest>();
+            var response = client.GetResponse<TResponse>(request).GetAwaiter().GetResult();
+            return response.Message;
+        }
+
+        public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
+        {
+            TryConnect();
+            var client = _bus.CreateRequestClient<TRequest>();
+            var response = await client.GetResponse<TResponse>(request);
+            return response.Message;
+        }
+
+        public HostReceiveEndpointHandle Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
+        {
+            TryConnect();
+            var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
             {
-                var response = await responder(context.Message);
-                await context.RespondAsync(response);
+                cfg.Handler<TRequest>(async context =>
+                {
+                    var response = responder(context.Message);
+                    await context.RespondAsync(response);
+                });
             });
-        });
+            return handle;
+        }
 
-        return new EndpointHandleAdapter(handle);
-    }
-
-    public void Dispose()
-    {
-        _bus?.Stop();
-    }
-
-    private class EndpointHandleAdapter : IDisposable
-    {
-        private readonly HostReceiveEndpointHandle _handle;
-
-        public EndpointHandleAdapter(HostReceiveEndpointHandle handle)
+        public async Task<HostReceiveEndpointHandle> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
         {
-            _handle = handle;
+            TryConnect();
+            var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
+            {
+                cfg.Handler<TRequest>(async context =>
+                {
+                    var response = await responder(context.Message);
+                    await context.RespondAsync(response);
+                });
+            });
+
+            return await Task.FromResult(handle);
+        }
+
+
+        private void TryConnect()
+        {
+            if (_bus?.CheckHealth().Status != BusHealthStatus.Healthy)
+            {
+                _bus?.StartAsync();
+            }
         }
 
         public void Dispose()
         {
-            _handle?.StopAsync().GetAwaiter().GetResult();
+            _bus?.Stop();
         }
     }
 }

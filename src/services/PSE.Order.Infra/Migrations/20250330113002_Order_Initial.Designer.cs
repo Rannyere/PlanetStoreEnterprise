@@ -12,7 +12,7 @@ using PSE.Order.Infra.Data;
 namespace PSE.Order.Infra.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20250324092246_Order_Initial")]
+    [Migration("20250330113002_Order_Initial")]
     partial class Order_Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace PSE.Order.Infra.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

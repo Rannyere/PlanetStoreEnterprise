@@ -87,12 +87,10 @@ public class OrderQueries : IOrderQueries
 
     private OrderCustomerDTO MappingOrder(dynamic result)
     {
-        var testCode = result[0].Code;
-        var testOrderId = result[0].OrderId;
         var order = new OrderCustomerDTO
         {
             Id = result[0].OrderId,
-            Code = Convert.ToInt32(testCode),
+            Code = Convert.ToInt32(result[0].Code),
             OrderStatus = Convert.ToInt32(result[0].OrderStatus),
             TotalValue = Convert.ToDecimal(result[0].TotalValue),
             Discount = Convert.ToDecimal(result[0].Discount),

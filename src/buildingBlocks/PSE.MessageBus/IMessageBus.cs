@@ -1,3 +1,4 @@
+using MassTransit;
 using PSE.Core.Messages.Integration;
 using System;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ public interface IMessageBus : IDisposable
 
     void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class;
 
-    void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class;
+    Task<HostReceiveEndpointHandle> SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class;
 
     TResponse Request<TRequest, TResponse>(TRequest request)
         where TRequest : IntegrationEvent
@@ -24,11 +25,11 @@ public interface IMessageBus : IDisposable
         where TRequest : IntegrationEvent
         where TResponse : ResponseMessage;
 
-    IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
+    HostReceiveEndpointHandle Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
         where TRequest : IntegrationEvent
         where TResponse : ResponseMessage;
 
-    Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
+    Task<HostReceiveEndpointHandle> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
         where TRequest : IntegrationEvent
         where TResponse : ResponseMessage;
 }

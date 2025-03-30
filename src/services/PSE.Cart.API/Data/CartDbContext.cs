@@ -11,7 +11,7 @@ public class CartDbContext : DbContext
         : base(options)
     {
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        ChangeTracker.AutoDetectChangesEnabled = false;
+        ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     public DbSet<CartItem> CartItems { get; set; }

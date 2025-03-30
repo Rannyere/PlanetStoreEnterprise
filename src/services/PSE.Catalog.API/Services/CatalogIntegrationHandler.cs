@@ -78,8 +78,8 @@ public class CatalogIntegrationHandler : BackgroundService
                 throw new DomainException($"Failed to update inventory - {message.OrderId}");
             }
 
-            var orderWriteOfftStock = new OrderWritedOffStockIntegrationEvent(message.CustomerId, message.OrderId);
-            await _bus.PublishAsync(orderWriteOfftStock);
+            var orderWriteOffStock = new OrderWritedOffStockIntegrationEvent(message.CustomerId, message.OrderId);
+            await _bus.PublishAsync(orderWriteOffStock);
         }
     }
 

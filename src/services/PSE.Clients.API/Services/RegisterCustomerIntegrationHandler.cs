@@ -15,7 +15,6 @@ public class RegisterCustomerIntegrationHandler : BackgroundService
 {
     private readonly IMessageBus _bus;
     private readonly IServiceProvider _serviceProvider;
-    private IDisposable _subscription;
 
     public RegisterCustomerIntegrationHandler(IServiceProvider serviceProvider,
                                               IMessageBus bus)
@@ -26,9 +25,8 @@ public class RegisterCustomerIntegrationHandler : BackgroundService
 
     private void SetResponder()
     {
-        _subscription?.Dispose();
-        _subscription = _bus.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(async request =>
-            await RegisterCustomer(request)).GetAwaiter().GetResult();
+        _bus.RespondAsync<UserRegisteredIntegrationEvent, ResponseMessage>(async request =>
+            await RegisterCustomer(request));
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,11 +47,5 @@ public class RegisterCustomerIntegrationHandler : BackgroundService
         }
 
         return new ResponseMessage(success);
-    }
-
-    public override void Dispose()
-    {
-        _subscription?.Dispose();
-        base.Dispose();
     }
 }

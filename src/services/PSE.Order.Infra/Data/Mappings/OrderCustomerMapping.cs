@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PSE.Order.Domain.Orders;
 
@@ -9,6 +10,11 @@ public class OrderCustomerMapping : IEntityTypeConfiguration<OrderCustomer>
     public void Configure(EntityTypeBuilder<OrderCustomer> builder)
     {
         builder.HasKey(o => o.Id);
+
+        builder.Property(p => p.Code)
+            .HasColumnName("Code")
+            .UseIdentityColumn<int>()
+            .ValueGeneratedOnAdd().Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);      
 
         builder.OwnsOne(o => o.Address, a =>
         {
@@ -46,11 +52,6 @@ public class OrderCustomerMapping : IEntityTypeConfiguration<OrderCustomer>
                 .HasColumnType("varchar(50)")
                 .IsRequired();
         });
-
-        builder.Property(p => p.Code)
-            .HasColumnName("Code")
-            .UseIdentityColumn()
-            .ValueGeneratedOnAdd();
 
         builder.Property(p => p.Discount)
             .HasColumnType("decimal(18,2)");

@@ -53,7 +53,6 @@ public class OrderRepository : IOrderRepository
 
     public void Update(OrderCustomer order)
     {
-        _context.Entry(order).State = EntityState.Modified;
         _context.Orders.Update(order);
     }
 
