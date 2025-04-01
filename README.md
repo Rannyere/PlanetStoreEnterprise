@@ -20,7 +20,7 @@ Before running the project, ensure you have the following dependencies installed
 
 - **.NET 9**
 - **SQL Server**
-- **MassTransit with RabbitMQ** (for asynchronous communication between microservices)
+- **Docker**
 
 The following technologies are used in the project:
 
@@ -29,6 +29,7 @@ The following technologies are used in the project:
 - **JWT** (JSON Web Token for secure authentication)
 - **Swashbuckle (Swagger)** (for API documentation)
 - **MediatR** (for CQRS pattern implementation)
+- - **MassTransit with RabbitMQ** (for asynchronous communication between microservices)
 
 ## Environment Setup
 
@@ -96,8 +97,8 @@ If you are using **Visual Studio**, you can also run migrations directly from th
 ##### **Example for PSE.Identification.API**
 
 ```powershell
-Add-Migration initial_data_Identification -Context ApplicationDbContext
-Update-Database -Context ApplicationDbContext
+Add-Migration initial_data_Identification
+Update-Database
 ```
 
 ##### **Example for PSE.Order.API**
