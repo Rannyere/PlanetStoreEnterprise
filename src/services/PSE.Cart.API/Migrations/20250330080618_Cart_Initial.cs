@@ -1,25 +1,29 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace PSE.Cart.API.Migrations
 {
-    public partial class initial_data_Cart : Migration
+    /// <inheritdoc />
+    public partial class Cart_Initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "CartCustomers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CustomerId = table.Column<Guid>(nullable: false),
-                    TotalValue = table.Column<decimal>(nullable: false),
-                    VoucherUsage = table.Column<bool>(nullable: false),
-                    Discount = table.Column<decimal>(nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    VoucherUsage = table.Column<bool>(type: "bit", nullable: false),
+                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VoucherCode = table.Column<string>(type: "varchar(50)", nullable: true),
-                    DiscountPercentage = table.Column<decimal>(nullable: true),
-                    DiscountValue = table.Column<decimal>(nullable: true),
-                    DiscountType = table.Column<int>(nullable: true)
+                    DiscountPercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DiscountType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,13 +34,13 @@ namespace PSE.Cart.API.Migrations
                 name: "CartItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
-                    Value = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Image = table.Column<string>(type: "varchar(100)", nullable: true),
-                    CartId = table.Column<Guid>(nullable: false)
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +50,7 @@ namespace PSE.Cart.API.Migrations
                         column: x => x.CartId,
                         principalTable: "CartCustomers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -60,6 +64,7 @@ namespace PSE.Cart.API.Migrations
                 column: "CartId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

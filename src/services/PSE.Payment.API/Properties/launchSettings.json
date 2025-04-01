@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "IIS - Development": {
+    "IIS - Dev": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -35,7 +35,7 @@
     },
     "SelfHosting": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:60741;http://localhost:10536",
       "environmentVariables": {

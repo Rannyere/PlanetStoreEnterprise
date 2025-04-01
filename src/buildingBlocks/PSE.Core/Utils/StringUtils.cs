@@ -1,13 +1,11 @@
-﻿using System;
 using System.Linq;
 
-namespace PSE.Core.Utils
+namespace PSE.Core.Utils;
+
+public static class StringUtils
 {
-    public static class StringUtils
+    public static string OnlyNumbers(this string str, string input)
     {
-        public static string OnlyNumbers(this string str, string input)
-        {
-            return new string(input.Where(char.IsDigit).ToArray());
-        }
+        return new string(input.Where(char.IsDigit).ToArray());
     }
-}
+}

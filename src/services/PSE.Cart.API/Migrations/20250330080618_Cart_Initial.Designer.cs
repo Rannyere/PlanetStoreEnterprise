@@ -2,45 +2,51 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSE.Cart.API.Data;
 
+#nullable disable
+
 namespace PSE.Cart.API.Migrations
 {
     [DbContext(typeof(CartDbContext))]
-    [Migration("20210309095837_initial_data_Cart")]
-    partial class initial_data_Cart
+    [Migration("20250330080618_Cart_Initial")]
+    partial class Cart_Initial
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("PSE.Cart.API.Models.CartCustomer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("VoucherUsage")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId")
-                        .HasName("IDX_Customer");
+                        .HasDatabaseName("IDX_Customer");
 
                     b.ToTable("CartCustomers");
                 });
@@ -49,10 +55,10 @@ namespace PSE.Cart.API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CartId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(100)");
@@ -61,13 +67,13 @@ namespace PSE.Cart.API.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -81,23 +87,23 @@ namespace PSE.Cart.API.Migrations
                     b.OwnsOne("PSE.Cart.API.Models.Voucher", "Voucher", b1 =>
                         {
                             b1.Property<Guid>("CartCustomerId")
-                                .HasColumnType("char(36)");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Code")
-                                .HasColumnName("VoucherCode")
-                                .HasColumnType("varchar(50)");
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("VoucherCode");
 
                             b1.Property<decimal?>("DiscountPercentage")
-                                .HasColumnName("DiscountPercentage")
-                                .HasColumnType("decimal(65,30)");
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DiscountPercentage");
 
                             b1.Property<int>("DiscountType")
-                                .HasColumnName("DiscountType")
-                                .HasColumnType("int");
+                                .HasColumnType("int")
+                                .HasColumnName("DiscountType");
 
                             b1.Property<decimal?>("DiscountValue")
-                                .HasColumnName("DiscountValue")
-                                .HasColumnType("decimal(65,30)");
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("DiscountValue");
 
                             b1.HasKey("CartCustomerId");
 
@@ -106,6 +112,8 @@ namespace PSE.Cart.API.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("CartCustomerId");
                         });
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("PSE.Cart.API.Models.CartItem", b =>
@@ -113,7 +121,15 @@ namespace PSE.Cart.API.Migrations
                     b.HasOne("PSE.Cart.API.Models.CartCustomer", "CartCustomer")
                         .WithMany("Items")
                         .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CartCustomer");
+                });
+
+            modelBuilder.Entity("PSE.Cart.API.Models.CartCustomer", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

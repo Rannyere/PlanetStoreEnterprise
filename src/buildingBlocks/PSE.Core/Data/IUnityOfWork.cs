@@ -1,10 +1,8 @@
-﻿using System;
 using System.Threading.Tasks;
 
-namespace PSE.Core.Data
+namespace PSE.Core.Data;
+
+public interface IUnityOfWork
 {
-    public interface IUnityOfWork
-    {
-        Task<bool> Commit();
-    }
-}
+    Task<bool> Commit();
+}

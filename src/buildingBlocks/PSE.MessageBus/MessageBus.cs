@@ -1,18 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using EasyNetQ;
-using Polly;
+using MassTransit;
 using PSE.Core.Messages.Integration;
-using RabbitMQ.Client.Exceptions;
+using System;
+using System.Threading.Tasks;
 
 namespace PSE.MessageBus
 {
-    public class MessageBus : IMessageBus
+    public class MessageBus : IMessageBus, IDisposable
     {
-        private IBus _bus;
-        private IAdvancedBus _advancedBus;
-
+        private IBusControl _bus;
         private readonly string _connectionString;
 
         public MessageBus(string connectionString)
@@ -21,90 +16,112 @@ namespace PSE.MessageBus
             TryConnect();
         }
 
-        public bool IsConnected => _bus?.Advanced.IsConnected ?? false;
-        public IAdvancedBus AdvancedBus => _bus?.Advanced;
+        public bool IsConnected => _bus?.CheckHealth().Status == BusHealthStatus.Healthy;
 
         public void Publish<T>(T message) where T : IntegrationEvent
         {
             TryConnect();
-            _bus.PubSub.Publish(message);
+            _bus.Publish(message);
         }
 
         public async Task PublishAsync<T>(T message) where T : IntegrationEvent
         {
             TryConnect();
-            await _bus.PubSub.PublishAsync(message);
+            await _bus.Publish(message);
         }
 
         public void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class
         {
             TryConnect();
-            _bus.PubSub.Subscribe(subscriptionId, onMessage);
+            _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
+            {
+                cfg.Handler<T>(context =>
+                {
+                    onMessage(context.Message);
+                    return Task.CompletedTask;
+                });
+            });
         }
 
-        public void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
+        public async Task<HostReceiveEndpointHandle> SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class
         {
             TryConnect();
-            _bus.PubSub.SubscribeAsync(subscriptionId, onMessage);
+            var handler = _bus.ConnectReceiveEndpoint(subscriptionId, cfg =>
+            {
+                cfg.Handler<T>(context =>
+                    onMessage(context.Message));
+            });
+            return await Task.FromResult(handler);
         }
 
-        public TResponse Request<TRequest, TResponse>(TRequest request) where TRequest : IntegrationEvent
+        public TResponse Request<TRequest, TResponse>(TRequest request)
+            where TRequest : IntegrationEvent
             where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.Request<TRequest, TResponse>(request);
+            var client = _bus.CreateRequestClient<TRequest>();
+            var response = client.GetResponse<TResponse>(request).GetAwaiter().GetResult();
+            return response.Message;
         }
 
         public async Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
         {
             TryConnect();
-            return await _bus.Rpc.RequestAsync<TRequest, TResponse>(request);
+            var client = _bus.CreateRequestClient<TRequest>();
+            var response = await client.GetResponse<TResponse>(request);
+            return response.Message;
         }
 
-        public IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
+        public HostReceiveEndpointHandle Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.Respond(responder);
+            var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
+            {
+                cfg.Handler<TRequest>(async context =>
+                {
+                    var response = responder(context.Message);
+                    await context.RespondAsync(response);
+                });
+            });
+            return handle;
         }
 
-        public Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
-            where TRequest : IntegrationEvent where TResponse : ResponseMessage
+        public async Task<HostReceiveEndpointHandle> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
+            where TRequest : IntegrationEvent
+            where TResponse : ResponseMessage
         {
             TryConnect();
-            return _bus.Rpc.RespondAsync(responder);
+            var handle = _bus.ConnectReceiveEndpoint($"{typeof(TRequest).Name}", cfg =>
+            {
+                cfg.Handler<TRequest>(async context =>
+                {
+                    var response = await responder(context.Message);
+                    await context.RespondAsync(response);
+                });
+            });
+
+            return await Task.FromResult(handle);
         }
 
         private void TryConnect()
         {
             if (IsConnected) return;
 
-            var policy = Policy.Handle<EasyNetQException>()
-                .Or<BrokerUnreachableException>()
-                .WaitAndRetry(3, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-            policy.Execute(() =>
+            _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                _bus = RabbitHutch.CreateBus(_connectionString);
-                _advancedBus = _bus.Advanced;
-                _advancedBus.Disconnected += OnDisconnect;
+                cfg.Host(_connectionString);
             });
-        }
 
-        private void OnDisconnect(object s, EventArgs e)
-        {
-            var policy = Policy.Handle<EasyNetQException>()
-                .Or<BrokerUnreachableException>()
-                .RetryForever();
-
-            policy.Execute(TryConnect);
+            _bus?.StartAsync();
         }
 
         public void Dispose()
         {
-            _bus.Dispose();
+            _bus?.Stop();
         }
     }
 }

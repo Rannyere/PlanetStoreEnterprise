@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PSE.WebApp.MVC.Models;
+using System;
+using System.Threading.Tasks;
 
-namespace PSE.WebApp.MVC.Services.Interfaces
+namespace PSE.WebApp.MVC.Services.Interfaces;
+
+public interface ICatalogService
 {
-    public interface ICatalogService
-    {
-        Task<PagedViewModel<ProductViewModel>> GetAllProducts(int pageSize, int pageIndex, string query = null);
+    Task<PagedViewModel<ProductViewModel>> GetAllProducts(int pageSize, int pageIndex, string query = null);
 
-        Task<ProductViewModel> GetProductById(Guid id);
-    }
-
+    Task<ProductViewModel> GetProductById(Guid id);
 }
+

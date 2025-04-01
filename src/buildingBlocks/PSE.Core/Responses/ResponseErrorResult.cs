@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace PSE.Core.Responses
+namespace PSE.Core.Responses;
+
+public class ResponseErrorResult
 {
-    public class ResponseErrorResult
-    {
-        public string Title { get; set; }
-        public int Status { get; set; }
-        public ResponseErrorMessages Errors { get; set; }
+    public string Title { get; set; }
+    public int Status { get; set; }
+    public ResponseErrorMessages Errors { get; set; }
 
-        public ResponseErrorResult()
-        {
-            Errors = new ResponseErrorMessages();
-        }
+    public ResponseErrorResult()
+    {
+        Errors = new ResponseErrorMessages();
     }
+}
 
-    public class ResponseErrorMessages
+public class ResponseErrorMessages
+{
+    public List<string> Messages { get; set; }
+
+    public ResponseErrorMessages()
     {
-        public List<string> Messages { get; set; }
-
-        public ResponseErrorMessages()
-        {
-            Messages = new List<string>();
-        }
+        Messages = new List<string>();
     }
 }

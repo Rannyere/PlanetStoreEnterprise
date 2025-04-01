@@ -1,38 +1,35 @@
-﻿using System;
-using System.Threading.Tasks;
-using EasyNetQ;
+using MassTransit;
 using PSE.Core.Messages.Integration;
+using System;
+using System.Threading.Tasks;
 
-namespace PSE.MessageBus
+namespace PSE.MessageBus;
+
+public interface IMessageBus : IDisposable
 {
-    public interface IMessageBus : IDisposable
-    {
-        bool IsConnected { get; }
+    bool IsConnected { get; }
 
-        IAdvancedBus AdvancedBus { get; }
+    void Publish<T>(T message) where T : IntegrationEvent;
 
-        void Publish<T>(T message) where T : IntegrationEvent;
+    Task PublishAsync<T>(T message) where T : IntegrationEvent;
 
-        Task PublishAsync<T>(T message) where T : IntegrationEvent;
+    void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class;
 
-        void Subscribe<T>(string subscriptionId, Action<T> onMessage) where T : class;
+    Task<HostReceiveEndpointHandle> SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class;
 
-        void SubscribeAsync<T>(string subscriptionId, Func<T, Task> onMessage) where T : class;
+    TResponse Request<TRequest, TResponse>(TRequest request)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage;
 
-        TResponse Request<TRequest, TResponse>(TRequest request)
-            where TRequest : IntegrationEvent
-            where TResponse : ResponseMessage;
+    Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage;
 
-        Task<TResponse> RequestAsync<TRequest, TResponse>(TRequest request)
-            where TRequest : IntegrationEvent
-            where TResponse : ResponseMessage;
+    HostReceiveEndpointHandle Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage;
 
-        IDisposable Respond<TRequest, TResponse>(Func<TRequest, TResponse> responder)
-            where TRequest : IntegrationEvent
-            where TResponse : ResponseMessage;
-
-        Task<IDisposable> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
-            where TRequest : IntegrationEvent
-            where TResponse : ResponseMessage;
-    }
+    Task<HostReceiveEndpointHandle> RespondAsync<TRequest, TResponse>(Func<TRequest, Task<TResponse>> responder)
+        where TRequest : IntegrationEvent
+        where TResponse : ResponseMessage;
 }

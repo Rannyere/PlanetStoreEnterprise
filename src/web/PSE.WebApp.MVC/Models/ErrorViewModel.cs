@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
+namespace PSE.WebApp.MVC.Models;
 
-namespace PSE.WebApp.MVC.Models
+public class ErrorViewModel
 {
-    public class ErrorViewModel
-    {
-        public int ErroCode { get; set; }
-        public string Title { get; set; }
-        public string Message { get; set; }
-    }
-}
+    public int ErroCode { get; set; }
+    public string Title { get; set; }
+    public string Message { get; set; }
+}

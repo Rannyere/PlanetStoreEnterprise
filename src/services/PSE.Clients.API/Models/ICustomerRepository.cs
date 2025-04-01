@@ -1,20 +1,19 @@
-﻿using System;
+using PSE.Core.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PSE.Core.Data;
 
-namespace PSE.Clients.API.Models
+namespace PSE.Clients.API.Models;
+
+public interface ICustomerRepository : IRepository<Customer>
 {
-    public interface ICustomerRepository : IRepository<Customer>
-    {
-        void Add(Customer customer);
+    void Add(Customer customer);
 
-        Task<IEnumerable<Customer>> GetAll();
+    Task<IEnumerable<Customer>> GetAll();
 
-        Task<Customer> GetByCpf(string cpf);
+    Task<Customer> GetByCpf(string cpf);
 
-        Task<Address> GetAddressById(Guid id);
+    Task<Address> GetAddressById(Guid id);
 
-        void AddAddress(Address address);
-    }
-}
+    void AddAddress(Address address);
+}

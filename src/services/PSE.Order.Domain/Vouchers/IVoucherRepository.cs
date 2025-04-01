@@ -1,13 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
 using PSE.Core.Data;
+using System.Threading.Tasks;
 
-namespace PSE.Order.Domain.Vouchers
+namespace PSE.Order.Domain.Vouchers;
+
+public interface IVoucherRepository : IRepository<Voucher>
 {
-    public interface IVoucherRepository : IRepository<Voucher>
-    {
-        Task<Voucher> GetVoucherByCode(string code);
+    Task<Voucher> GetVoucherByCode(string code);
 
-        void Update(Voucher voucher);
-    }
-}
+    void Update(Voucher voucher);
+}

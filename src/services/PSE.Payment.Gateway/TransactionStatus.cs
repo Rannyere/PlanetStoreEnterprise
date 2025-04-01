@@ -1,11 +1,10 @@
-﻿namespace PSE.Payment.Gateway
+namespace PSE.Payment.Gateway;
+
+public enum TransactionStatus
 {
-    public enum TransactionStatus
-    {
-        Authorized = 1,
-        Paid,
-        Refused,
-        Chargedback,
-        Cancelled
-    }
-}
+    Authorized = 1,
+    Paid,
+    Refused,
+    Chargedback,
+    Cancelled
+}

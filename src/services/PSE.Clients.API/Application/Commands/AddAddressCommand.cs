@@ -1,68 +1,67 @@
-﻿using System;
 using FluentValidation;
 using PSE.Core.Messages;
+using System;
 
-namespace PSE.Clients.API.Application.Commands
+namespace PSE.Clients.API.Application.Commands;
+
+public class AddAddressCommand : Command
 {
-    public class AddAddressCommand : Command
+    public Guid CustomerId { get; set; }
+    public string Street { get; set; }
+    public string Number { get; set; }
+    public string Complement { get; set; }
+    public string ZipCode { get; set; }
+    public string Neighborhood { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+
+    public AddAddressCommand() { }
+
+    public AddAddressCommand(Guid customerId, string street, string number, string complement, string zipCode, string neighborhood, string city, string state)
     {
-        public Guid CustomerId { get; set; }
-        public string Street { get; set; }
-        public string Number { get; set; }
-        public string Complement { get; set; }
-        public string ZipCode { get; set; }
-        public string Neighborhood { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+        CustomerId = customerId;
+        Street = street;
+        Number = number;
+        Complement = complement;
+        ZipCode = zipCode;
+        Neighborhood = neighborhood;
+        City = city;
+        State = state;
+    }
 
-        public AddAddressCommand() { }
+    public override bool IsValid()
+    {
+        ValidationResult = new AddressValidation().Validate(this);
+        return ValidationResult.IsValid;
+    }
 
-        public AddAddressCommand(Guid customerId, string street, string number, string complement, string zipCode, string neighborhood, string city, string state)
+    public class AddressValidation : AbstractValidator<AddAddressCommand>
+    {
+        public AddressValidation()
         {
-            CustomerId = customerId;
-            Street = street;
-            Number = number;
-            Complement = complement;
-            ZipCode = zipCode;
-            Neighborhood = neighborhood;
-            City = city;
-            State = state;
-        }
+            RuleFor(c => c.Street)
+                .NotEmpty()
+                .WithMessage("Inform the Street");
 
-        public override bool IsValid()
-        {
-            ValidationResult = new AddressValidation().Validate(this);
-            return ValidationResult.IsValid;
-        }
+            RuleFor(c => c.Number)
+                .NotEmpty()
+                .WithMessage("Inform the Number");
 
-        public class AddressValidation : AbstractValidator<AddAddressCommand>
-        {
-            public AddressValidation()
-            {
-                RuleFor(c => c.Street)
-                    .NotEmpty()
-                    .WithMessage("Inform the Street");
+            RuleFor(c => c.ZipCode)
+                .NotEmpty()
+                .WithMessage("Inform the ZipCode");
 
-                RuleFor(c => c.Number)
-                    .NotEmpty()
-                    .WithMessage("Inform the Number");
+            RuleFor(c => c.Neighborhood)
+                .NotEmpty()
+                .WithMessage("Inform the Neighborhood");
 
-                RuleFor(c => c.ZipCode)
-                    .NotEmpty()
-                    .WithMessage("Inform the ZipCode");
+            RuleFor(c => c.City)
+                .NotEmpty()
+                .WithMessage("Inform the City");
 
-                RuleFor(c => c.Neighborhood)
-                    .NotEmpty()
-                    .WithMessage("Inform the Neighborhood");
-
-                RuleFor(c => c.City)
-                    .NotEmpty()
-                    .WithMessage("Inform the City");
-
-                RuleFor(c => c.State)
-                    .NotEmpty()
-                    .WithMessage("Inform the State");
-            }
+            RuleFor(c => c.State)
+                .NotEmpty()
+                .WithMessage("Inform the State");
         }
     }
-}
+}

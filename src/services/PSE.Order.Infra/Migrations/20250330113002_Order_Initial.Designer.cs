@@ -2,133 +2,142 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSE.Order.Infra.Data;
 
+#nullable disable
+
 namespace PSE.Order.Infra.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20210310151852_Orders")]
-    partial class Orders
+    [Migration("20250330113002_Order_Initial")]
+    partial class Order_Initial
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("PSE.Order.Domain.Orders.OrderCustomer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<uint>("Code")
-                        .HasColumnName("Code")
-                        .HasColumnType("int unsigned");
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Code");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"));
 
                     b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateRegister")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("VoucherId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("VoucherUsage")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("PSE.Order.Domain.Orders.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ProductImage")
+                    b.Property<string>("Image")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("ProductName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(250)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValueUnit")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("PSE.Order.Domain.Vouchers.Voucher", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Activ")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("DateCreation")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateUsage")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateValidity")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal?>("DiscountPercentage")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("DiscountType")
-                        .HasColumnType("int");
+                    b.Property<decimal>("DiscountType")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("DiscountValue")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<bool>("Usage")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Vouchers", (string)null);
                 });
 
             modelBuilder.Entity("PSE.Order.Domain.Orders.OrderCustomer", b =>
@@ -140,35 +149,41 @@ namespace PSE.Order.Infra.Migrations
                     b.OwnsOne("PSE.Order.Domain.Orders.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("OrderCustomerId")
-                                .HasColumnType("char(36)");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
-                                .HasColumnName("City")
-                                .HasColumnType("varchar(100)");
+                                .IsRequired()
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("City");
 
                             b1.Property<string>("Complement")
-                                .HasColumnName("Complement")
-                                .HasColumnType("varchar(100)");
+                                .HasColumnType("varchar(250)")
+                                .HasColumnName("Complement");
 
-                            b1.Property<string>("Neighborhoodty")
-                                .HasColumnName("Neighborhoodty")
-                                .HasColumnType("varchar(100)");
+                            b1.Property<string>("Neighborhood")
+                                .IsRequired()
+                                .HasColumnType("varchar(100)")
+                                .HasColumnName("Neighborhood");
 
                             b1.Property<string>("Number")
-                                .HasColumnName("Number")
-                                .HasColumnType("varchar(100)");
+                                .IsRequired()
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("Number");
 
                             b1.Property<string>("State")
-                                .HasColumnName("State")
-                                .HasColumnType("varchar(100)");
+                                .IsRequired()
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("State");
 
                             b1.Property<string>("Street")
-                                .HasColumnName("Street")
-                                .HasColumnType("varchar(100)");
+                                .IsRequired()
+                                .HasColumnType("varchar(200)")
+                                .HasColumnName("Street");
 
                             b1.Property<string>("ZipCode")
-                                .HasColumnName("ZipCode")
-                                .HasColumnType("varchar(100)");
+                                .IsRequired()
+                                .HasColumnType("varchar(20)")
+                                .HasColumnName("ZipCode");
 
                             b1.HasKey("OrderCustomerId");
 
@@ -177,6 +192,10 @@ namespace PSE.Order.Infra.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("OrderCustomerId");
                         });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("PSE.Order.Domain.Orders.OrderItem", b =>
@@ -185,6 +204,13 @@ namespace PSE.Order.Infra.Migrations
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .IsRequired();
+
+                    b.Navigation("OrderCustomer");
+                });
+
+            modelBuilder.Entity("PSE.Order.Domain.Orders.OrderCustomer", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,3 @@
-﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,49 +8,48 @@ using PSE.Payment.API.Data;
 using PSE.Payment.API.Facade;
 using PSE.WebAPI.Core.Identification;
 
-namespace PSE.Payment.API.Configuration
+namespace PSE.Payment.API.Configuration;
+
+public static class ApiConfig
 {
-    public static class ApiConfig
+    public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
+        services.AddDbContext<PaymentDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddControllers();
+
+        services.Configure<PaymentConfig>(configuration.GetSection("PaymentConfig"));
+
+        services.AddCors(options =>
         {
-            services.AddDbContext<PaymentDbContext>(options =>
-                options.UseMySql(configuration.GetConnectionString(name: "DefaultConnection")));
-
-            services.AddControllers();
-
-            services.Configure<PaymentConfig>(configuration.GetSection("PaymentConfig"));
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("Total",
-                    builder =>
-                        builder
-                            .AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader());
-            });
-        }
-
-        public static void UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors("Total");
-
-            app.UseAuthConfiguration();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+            options.AddPolicy("Total",
+                builder =>
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+        });
     }
-}
+
+    public static void UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        app.UseCors("Total");
+
+        app.UseAuthConfiguration();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+    }
+}

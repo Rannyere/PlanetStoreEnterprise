@@ -1,4 +1,3 @@
-﻿using System;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -11,28 +10,27 @@ using PSE.Clients.API.Models;
 using PSE.Core.Mediator;
 using PSE.WebAPI.Core.User;
 
-namespace PSE.Clients.API.Configuration
+namespace PSE.Clients.API.Configuration;
+
+public static class DependencyInjectionConfig
 {
-    public static class DependencyInjectionConfig
+    public static void RegisterServices(this IServiceCollection services)
     {
-        public static void RegisterServices(this IServiceCollection services)
-        {
-            // Application
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAspNetUser, AspNetUser>();
+        // Application
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IAspNetUser, AspNetUser>();
 
-            services.AddScoped<IMediatorHandler, MediatorHandler>();
+        services.AddScoped<IMediatorHandler, MediatorHandler>();
 
-            // Command
-            services.AddScoped<IRequestHandler<CustomerRegisterCommand, ValidationResult>, CustomerCommandHandler>();
-            services.AddScoped<IRequestHandler<AddAddressCommand, ValidationResult>, CustomerCommandHandler>();
+        // Command
+        services.AddScoped<IRequestHandler<CustomerRegisterCommand, ValidationResult>, CustomerCommandHandler>();
+        services.AddScoped<IRequestHandler<AddAddressCommand, ValidationResult>, CustomerCommandHandler>();
 
-            // Event
-            services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
+        // Event
+        services.AddScoped<INotificationHandler<CustomerRegisteredEvent>, CustomerEventHandler>();
 
-            // Data
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ClientsDbContext>();
-        }
+        // Data
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ClientsDbContext>();
     }
-}
+}

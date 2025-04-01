@@ -1,9 +1,7 @@
-﻿using System;
-namespace PSE.Order.Domain.Vouchers
+namespace PSE.Order.Domain.Vouchers;
+
+public enum DiscountTypeVoucher
 {
-    public enum DiscountTypeVoucher
-    {
-        Percentage = 0,
-        Value = 1
-    }
-}
+    Percentage = 0,
+    Value = 1
+}

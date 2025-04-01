@@ -1,55 +1,54 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Localization;
 using PSE.Core.DomainObjects;
+using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace PSE.WebApp.MVC.Extensions
+namespace PSE.WebApp.MVC.Extensions;
+
+public class CpfAttribute : ValidationAttribute
 {
-    public class CpfAttribute : ValidationAttribute
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            return Cpf.ValidateCpfBrazil(value.ToString()) ? ValidationResult.Success : new ValidationResult("CPF invalid format");
-        }
+        return Cpf.ValidateCpfBrazil(value.ToString()) ? ValidationResult.Success : new ValidationResult("CPF invalid format");
+    }
+}
+
+public class CpfAttributeAdapter : AttributeAdapterBase<CpfAttribute>
+{
+    public CpfAttributeAdapter(CpfAttribute attribute, IStringLocalizer stringLocalizer) : base(attribute, stringLocalizer)
+    {
     }
 
-    public class CpfAttributeAdapter : AttributeAdapterBase<CpfAttribute>
+    public override void AddValidation(ClientModelValidationContext context)
     {
-
-        public CpfAttributeAdapter(CpfAttribute attribute, IStringLocalizer stringLocalizer) : base(attribute, stringLocalizer)
+        if (context == null)
         {
+            throw new ArgumentNullException(nameof(context));
+        }
 
-        }
-        public override void AddValidation(ClientModelValidationContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-cpf", GetErrorMessage(context));
-        }
-        public override string GetErrorMessage(ModelValidationContextBase validationContext)
-        {
-            return "CPF invalid format";
-        }
+        MergeAttribute(context.Attributes, "data-val", "true");
+        MergeAttribute(context.Attributes, "data-val-cpf", GetErrorMessage(context));
     }
 
-    public class CpfValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
+    public override string GetErrorMessage(ModelValidationContextBase validationContext)
     {
-        private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
+        return "CPF invalid format";
+    }
+}
 
-        public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
+public class CpfValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
+{
+    private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
+
+    public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
+    {
+        if (attribute is CpfAttribute CpfAttribute)
         {
-            if (attribute is CpfAttribute CpfAttribute)
-            {
-                return new CpfAttributeAdapter(CpfAttribute, stringLocalizer);
-            }
-
-            return _baseProvider.GetAttributeAdapter(attribute, stringLocalizer);
+            return new CpfAttributeAdapter(CpfAttribute, stringLocalizer);
         }
+
+        return _baseProvider.GetAttributeAdapter(attribute, stringLocalizer);
     }
 }
