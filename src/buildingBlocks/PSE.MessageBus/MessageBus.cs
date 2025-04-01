@@ -7,16 +7,13 @@ namespace PSE.MessageBus
 {
     public class MessageBus : IMessageBus, IDisposable
     {
-        private readonly IBusControl _bus;
+        private IBusControl _bus;
+        private readonly string _connectionString;
 
         public MessageBus(string connectionString)
         {
-            _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
-                cfg.Host(connectionString);
-            });
-
-            _bus.StartAsync();
+            _connectionString = connectionString;
+            TryConnect();
         }
 
         public bool IsConnected => _bus?.CheckHealth().Status == BusHealthStatus.Healthy;
@@ -110,13 +107,16 @@ namespace PSE.MessageBus
             return await Task.FromResult(handle);
         }
 
-
         private void TryConnect()
         {
-            if (_bus?.CheckHealth().Status != BusHealthStatus.Healthy)
+            if (IsConnected) return;
+
+            _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                _bus?.StartAsync();
-            }
+                cfg.Host(_connectionString);
+            });
+
+            _bus?.StartAsync();
         }
 
         public void Dispose()
